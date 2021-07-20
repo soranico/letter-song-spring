@@ -16,60 +16,10 @@
 
 package org.springframework.beans.factory.support;
 
-import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.ObjectInputStream;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
-import javax.inject.Provider;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.TypeConverter;
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.BeanCurrentlyInCreationException;
-import org.springframework.beans.factory.BeanDefinitionStoreException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
-import org.springframework.beans.factory.CannotLoadBeanClassException;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.InjectionPoint;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.SmartFactoryBean;
-import org.springframework.beans.factory.SmartInitializingSingleton;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.config.DependencyDescriptor;
-import org.springframework.beans.factory.config.NamedBeanHolder;
+import org.springframework.beans.factory.*;
+import org.springframework.beans.factory.config.*;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.MergedAnnotation;
@@ -78,12 +28,21 @@ import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.core.log.LogMessage;
 import org.springframework.core.metrics.StartupStep;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.CompositeIterator;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
+
+import javax.inject.Provider;
+import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Spring's default implementation of the {@link ConfigurableListableBeanFactory}
@@ -167,6 +126,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private final Map<String, BeanDefinitionHolder> mergedBeanDefinitionHolders = new ConcurrentHashMap<>(256);
 
 	/** Map of singleton and non-singleton bean names, keyed by dependency type. */
+	/**
+	 * 缓存所有被依赖的bean
+	 * e.g 
+	 * A 依赖 B 
+	 * 则缓存B 以及所有B的beanName
+	 * 从而加速缓存
+	 * {@link #getBeanNamesForType(Class, boolean, boolean)}
+	 */
 	private final Map<Class<?>, String[]> allBeanNamesByType = new ConcurrentHashMap<>(64);
 
 	/** Map of singleton-only bean names, keyed by dependency type. */
@@ -538,15 +505,22 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
+		/**
+		 * 如果没有冻结或者允许实例化懒加载的bean
+		 * 没有冻结每次都会遍历beanDefinitionNames(所有BD)
+		 * 并且合并没有合并的BD
+		 */
 		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
 			return doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, allowEagerInit);
 		}
+		// 从缓存中获取
 		Map<Class<?>, String[]> cache =
 				(includeNonSingletons ? this.allBeanNamesByType : this.singletonBeanNamesByType);
 		String[] resolvedBeanNames = cache.get(type);
 		if (resolvedBeanNames != null) {
 			return resolvedBeanNames;
 		}
+		// 缓存中没有则需要遍历所有BD并处理合并后进行缓存
 		resolvedBeanNames = doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, true);
 		if (ClassUtils.isCacheSafe(type, getBeanClassLoader())) {
 			cache.put(type, resolvedBeanNames);
@@ -876,6 +850,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Override
 	protected void clearMergedBeanDefinition(String beanName) {
 		super.clearMergedBeanDefinition(beanName);
+		/**
+		 * 放的是被依赖的BD
+		 */
 		this.mergedBeanDefinitionHolders.remove(beanName);
 	}
 
@@ -904,6 +881,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	 */
 	@Override
 	protected boolean isBeanEligibleForMetadataCaching(String beanName) {
+		/**
+		 * 是否冻结或者正在创建过程
+		 * 如果冻结或者在创建返回true
+		 */
 		return (this.configurationFrozen || super.isBeanEligibleForMetadataCaching(beanName));
 	}
 
@@ -919,6 +900,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		// Trigger initialization of all non-lazy singleton beans...
 		for (String beanName : beanNames) {
+			/**
+			 * 默认情况下这里会进行一次BD的合并
+			 * 但是如果在bfpp中冻结了容器会导致
+			 * beanFactory.clearMetadataCache();
+			 * @see org.springframework.beans.factory.support.AbstractBeanFactory#clearMetadataCache()
+			 * 最后一次请求合并标记跳过从而导致这里跳过合并
+			 */
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				if (isFactoryBean(beanName)) {
@@ -988,9 +976,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						"Validation of bean definition failed", ex);
 			}
 		}
-
+		/**
+		 * 从缓存中获取beanName对应的BD
+		 * 如果存在说明此BD已经注册过
+		 *
+		 */
 		BeanDefinition existingDefinition = this.beanDefinitionMap.get(beanName);
 		if (existingDefinition != null) {
+			// 允许覆盖BD
 			if (!isAllowBeanDefinitionOverriding()) {
 				throw new BeanDefinitionOverrideException(beanName, beanDefinition, existingDefinition);
 			}
@@ -1016,9 +1009,18 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							"] with [" + beanDefinition + "]");
 				}
 			}
+			/**
+			 * 直接替换BD
+			 */
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
 		else {
+			/**
+			 * 此时说明已经在创建过程中
+			 * 对于ArrayList而言可能存在并发读写的问题
+			 * 因此需要先对map加锁,防止读取操作
+			 * 并且在新的List中进行操作
+			 */
 			if (hasBeanCreationStarted()) {
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				synchronized (this.beanDefinitionMap) {
@@ -1027,6 +1029,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					updatedDefinitions.addAll(this.beanDefinitionNames);
 					updatedDefinitions.add(beanName);
 					this.beanDefinitionNames = updatedDefinitions;
+					// 移除手动注册的BD(非扫描的通过API添加到容器内的)
 					removeManualSingletonName(beanName);
 				}
 			}
@@ -1038,7 +1041,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			this.frozenBeanDefinitionNames = null;
 		}
-
+		/**
+		 * 单例池中已经存在,需要销毁之前的bean
+		 * 重新注册
+		 */
 		if (existingDefinition != null || containsSingleton(beanName)) {
 			resetBeanDefinition(beanName);
 		}
@@ -1098,9 +1104,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		// Notify all post-processors that the specified bean definition has been reset.
 		for (MergedBeanDefinitionPostProcessor processor : getBeanPostProcessorCache().mergedDefinition) {
+			/**
+			 * 清空bdpp中的缓存注入信息
+			 */
 			processor.resetBeanDefinition(beanName);
 		}
-
+		// 重置所有父BD是当前销毁bean的其他bean
 		// Reset all bean definitions that have the given bean as parent (recursively).
 		for (String bdName : this.beanDefinitionNames) {
 			if (!beanName.equals(bdName)) {
@@ -1150,7 +1159,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Override
 	public void destroySingleton(String beanName) {
 		super.destroySingleton(beanName);
+		// 移除手动注册的单例
 		removeManualSingletonName(beanName);
+		// 清空缓存
 		clearByTypeCache();
 	}
 
@@ -1294,6 +1305,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		}
 		else {
+			/**
+			 * 注解@Lazy用于属性时注入的bean对象不同
+			 */
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
 			if (result == null) {

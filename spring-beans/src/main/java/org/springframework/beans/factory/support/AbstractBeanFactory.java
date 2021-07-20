@@ -16,59 +16,9 @@
 
 package org.springframework.beans.factory.support;
 
-import java.beans.PropertyEditor;
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.PropertyEditorRegistrar;
-import org.springframework.beans.PropertyEditorRegistry;
-import org.springframework.beans.PropertyEditorRegistrySupport;
-import org.springframework.beans.SimpleTypeConverter;
-import org.springframework.beans.TypeConverter;
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.BeanCurrentlyInCreationException;
-import org.springframework.beans.factory.BeanDefinitionStoreException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.BeanIsAbstractException;
-import org.springframework.beans.factory.BeanIsNotAFactoryException;
-import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
-import org.springframework.beans.factory.CannotLoadBeanClassException;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.SmartFactoryBean;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.BeanExpressionContext;
-import org.springframework.beans.factory.config.BeanExpressionResolver;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
-import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
-import org.springframework.beans.factory.config.Scope;
-import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
+import org.springframework.beans.*;
+import org.springframework.beans.factory.*;
+import org.springframework.beans.factory.config.*;
 import org.springframework.core.AttributeAccessor;
 import org.springframework.core.DecoratingClassLoader;
 import org.springframework.core.NamedThreadLocal;
@@ -78,11 +28,15 @@ import org.springframework.core.log.LogMessage;
 import org.springframework.core.metrics.ApplicationStartup;
 import org.springframework.core.metrics.StartupStep;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.util.StringValueResolver;
+import org.springframework.util.*;
+
+import java.beans.PropertyEditor;
+import java.security.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 /**
  * Abstract base class for {@link org.springframework.beans.factory.BeanFactory}
@@ -1338,6 +1292,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected RootBeanDefinition getMergedLocalBeanDefinition(String beanName) throws BeansException {
 		// Quick check on the concurrent map first, with minimal locking.
 		RootBeanDefinition mbd = this.mergedBeanDefinitions.get(beanName);
+		/**
+		 * 重新合并标记为false(默认)则不再合并
+		 */
 		if (mbd != null && !mbd.stale) {
 			return mbd;
 		}
@@ -1380,12 +1337,18 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			if (containingBd == null) {
 				mbd = this.mergedBeanDefinitions.get(beanName);
 			}
-
+			/**
+			 *没有合并或标记需要合并
+			 */
 			if (mbd == null || mbd.stale) {
 				previous = mbd;
+				/**
+				 * 没有父BD
+				 */
 				if (bd.getParentName() == null) {
 					// Use copy of given root bean definition.
 					if (bd instanceof RootBeanDefinition) {
+						// 克隆BD,需要RootBD的所有属性
 						mbd = ((RootBeanDefinition) bd).cloneBeanDefinition();
 					}
 					else {
@@ -1401,6 +1364,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							pbd = getMergedBeanDefinition(parentBeanName);
 						}
 						else {
+							// 父子beanName相同
 							BeanFactory parent = getParentBeanFactory();
 							if (parent instanceof ConfigurableBeanFactory) {
 								pbd = ((ConfigurableBeanFactory) parent).getMergedBeanDefinition(parentBeanName);
@@ -1436,6 +1400,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Cache the merged bean definition for the time being
 				// (it might still get re-merged later on in order to pick up metadata changes)
+				/**
+				 * 第一次调用是在invokeBeanFactoryPostProcessors
+				 * 获取BeanDefinitionRegistryPostProcessor时需要进行合并所有BD
+				 *
+				 * 第二次是在创建Bean之前
+				 */
 				if (containingBd == null && isCacheBeanMetadata()) {
 					this.mergedBeanDefinitions.put(beanName, mbd);
 				}
@@ -1485,8 +1455,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param beanName the bean name to clear the merged definition for
 	 */
 	protected void clearMergedBeanDefinition(String beanName) {
+		// 已经合并过的BD,并不会清除,所有BD
 		RootBeanDefinition bd = this.mergedBeanDefinitions.get(beanName);
 		if (bd != null) {
+			// 标识这个BD需要重新合并
 			bd.stale = true;
 		}
 	}
@@ -1501,6 +1473,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	public void clearMetadataCache() {
 		this.mergedBeanDefinitions.forEach((beanName, bd) -> {
+			/**
+			 * 冻结或者在创建跳过
+			 */
 			if (!isBeanEligibleForMetadataCaching(beanName)) {
 				bd.stale = true;
 			}
@@ -1776,6 +1751,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected void markBeanAsCreated(String beanName) {
 		if (!this.alreadyCreated.contains(beanName)) {
 			synchronized (this.mergedBeanDefinitions) {
+				/**
+				 * 在准备创建之前,强制标记已经需要合并过的BD
+				 * 需要再次合并
+				 */
 				if (!this.alreadyCreated.contains(beanName)) {
 					// Let the bean definition get re-merged now that we're actually creating
 					// the bean... just in case some of its metadata changed in the meantime.

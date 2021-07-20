@@ -16,32 +16,21 @@
 
 package org.springframework.context.support;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.AbstractBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.support.MergedBeanDefinitionPostProcessor;
-import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.beans.factory.support.*;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
 import org.springframework.core.metrics.ApplicationStartup;
 import org.springframework.core.metrics.StartupStep;
 import org.springframework.lang.Nullable;
+
+import java.util.*;
 
 /**
  * Delegate for AbstractApplicationContext's post-processor handling.
@@ -99,6 +88,11 @@ final class PostProcessorRegistrationDelegate {
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
+			/**
+			 * 执行bfpp之前先去合并BD,手动注册的bdrpp执行前不需要合并
+			 * 因为bdrpp只能修改BD的属性，而不能对factory进行操作
+			 * bdrpp执行完修改BD的属性可以直接在这次合并
+			 */
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
@@ -199,6 +193,11 @@ final class PostProcessorRegistrationDelegate {
 
 		// Clear cached merged bean definitions since the post-processors might have
 		// modified the original metadata, e.g. replacing placeholders in values...
+		/**
+		 * 执行用户注册的bfpp过程中可能会对BD进行一些操作
+		 * 如果用户没有手动冻结factory,那么这里会标记已经合并的BD
+		 * 需要重新进行合并从而应用最新的属性值
+		 */
 		beanFactory.clearMetadataCache();
 	}
 

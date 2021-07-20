@@ -16,10 +16,10 @@
 
 package org.springframework.beans.factory.config;
 
-import java.lang.reflect.Constructor;
-
 import org.springframework.beans.BeansException;
 import org.springframework.lang.Nullable;
+
+import java.lang.reflect.Constructor;
 
 /**
  * Extension of the {@link InstantiationAwareBeanPostProcessor} interface,
@@ -58,6 +58,7 @@ public interface SmartInstantiationAwareBeanPostProcessor extends InstantiationA
 	 * @param beanName the name of the bean
 	 * @return the candidate constructors, or {@code null} if none specified
 	 * @throws org.springframework.beans.BeansException in case of errors
+	 * 推断构造方法
 	 */
 	@Nullable
 	default Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, String beanName)
@@ -86,6 +87,7 @@ public interface SmartInstantiationAwareBeanPostProcessor extends InstantiationA
 	 * @return the object to expose as bean reference
 	 * (typically with the passed-in bean instance as default)
 	 * @throws org.springframework.beans.BeansException in case of errors
+	 * 获取早期引用，此时的bean并非一个完整的bean因为没有走完生命周期
 	 */
 	default Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {
 		return bean;
