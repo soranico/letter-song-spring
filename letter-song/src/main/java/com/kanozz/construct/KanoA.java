@@ -2,7 +2,7 @@ package com.kanozz.construct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class KanoA {
+class KanoA {
 
 	private KanoB kanoB;
 
