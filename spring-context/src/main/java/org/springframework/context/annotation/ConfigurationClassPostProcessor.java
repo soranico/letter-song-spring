@@ -29,14 +29,12 @@ import org.springframework.beans.factory.parsing.FailFastProblemReporter;
 import org.springframework.beans.factory.parsing.PassThroughSourceExtractor;
 import org.springframework.beans.factory.parsing.ProblemReporter;
 import org.springframework.beans.factory.parsing.SourceExtractor;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.beans.factory.support.BeanNameGenerator;
+import org.springframework.beans.factory.support.*;
 import org.springframework.context.ApplicationStartupAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ConfigurationClassEnhancer.EnhancedConfiguration;
+import org.springframework.core.AttributeAccessorSupport;
 import org.springframework.core.NativeDetector;
 import org.springframework.core.Ordered;
 import org.springframework.core.PriorityOrdered;
@@ -264,16 +262,27 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
 		/**
 		 *
-		 * 获取所有bdName
-		 *
-		 *
-		 *
+		 * 获取所有bdName,如果冻结了则从 frozenBeanDefinitionNames 属性中取值
+		 * 否则拿 beanDefinitionNames
+		 * @see DefaultListableBeanFactory#getBeanDefinitionNames()
 		 *
 		 */
 		String[] candidateNames = registry.getBeanDefinitionNames();
-
 		for (String beanName : candidateNames) {
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
+			/**
+			 *
+			 * BD继承 AttributeAccessor 其中可以设置一些属性
+			 *
+			 * @see AttributeAccessorSupport#attributes
+			 *
+			 * spring 通过设置 CONFIGURATION_CLASS_ATTRIBUTE 属性来标记
+			 * 当前bean是否为一个配置类
+			 *
+			 *
+			 *
+			 *
+			 */
 			if (beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE) != null) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
