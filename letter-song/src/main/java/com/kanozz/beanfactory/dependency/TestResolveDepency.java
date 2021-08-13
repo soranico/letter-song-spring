@@ -18,8 +18,8 @@ public class TestResolveDepency {
 	 * <p>
 	 * 优先级 @Resource指定的name > registerResolvableDependency()指定 > byName/byType
 	 * <p>
-	 * 自动注入byName/byType > @Resource指定的name > registerResolvableDependency()指定
-	 * > @Sutowire
+	 * 自动注入 byName/byType > @Resource指定的name > registerResolvableDependency()指定
+	 * > @Autowire
 	 */
 	@Test
 	public void testRegisterResolvableDependency() {
