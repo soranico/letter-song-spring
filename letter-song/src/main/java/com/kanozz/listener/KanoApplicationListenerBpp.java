@@ -13,9 +13,9 @@ class KanoApplicationListenerBpp implements BeanPostProcessor, ApplicationContex
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-		if (bean instanceof KanoListener){
+		if (bean instanceof KanoListenerImpl){
 			ApplicationEventMulticaster multicaster = applicationContext.getBean(ApplicationEventMulticaster.class);
-			multicaster.addApplicationListener((KanoListener)bean);
+			multicaster.addApplicationListener((KanoListenerImpl)bean);
 		}
 		return bean;
 	}

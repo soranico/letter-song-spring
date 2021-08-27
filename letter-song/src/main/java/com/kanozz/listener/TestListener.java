@@ -2,8 +2,11 @@ package com.kanozz.listener;
 
 import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.AutoProxyRegistrar;
+import org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration;
 
 public class TestListener {
 
@@ -28,11 +31,50 @@ public class TestListener {
 	@Test
 	public void testProxySameListener(){
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.register(KanoApplicationListenerBpp.class,KanoListener.class,KanoAspect.class);
+		context.register(KanoApplicationListenerBpp.class, KanoListenerImpl.class,KanoAspect.class);
 		// aop支持
 		context.register(AnnotationAwareAspectJAutoProxyCreator.class);
 		context.refresh();
 	}
+
+
+	/***
+	 *
+	 * 注册一个 EventListenerMethodProcessor 负责处理 @EventListener
+	 * @see org.springframework.context.annotation.AnnotationConfigUtils#registerAnnotationConfigProcessors(BeanDefinitionRegistry, Object)
+	 * @see org.springframework.context.event.EventListenerMethodProcessor
+	 *
+	 * 实现了 SmartInitializingSingleton 接口会在 所有单例bean创建完成后回调
+	 *
+	 *
+	 *
+	 */
+	@Test
+	public void testAnnotationListener(){
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register( KanoListenerAnnotation.class,KanoAspect.class);
+		context.register(AutoProxyRegistrar.class, ProxyTransactionManagementConfiguration.class);
+		context.register(AnnotationAwareAspectJAutoProxyCreator.class);
+		context.refresh();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
