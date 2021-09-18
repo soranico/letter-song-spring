@@ -1,10 +1,10 @@
 package com.kanozz.fourbpp.instantiationawarebpp.afterinstantiation;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 class AfterBppB {
-
+	private static final Logger log = LoggerFactory.getLogger(AfterBppB.class);
 	private AfterBppC afterBppC;
 
 	public void setAfterBppC(AfterBppC afterBppC) {

@@ -1,13 +1,15 @@
 package com.kanozz.beandefinition.factorymethod;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TestFactoryMethod {
-
+	private static final Logger log = LoggerFactory.getLogger(TestFactoryMethod.class);
 	/**
 	 *
 	 * 指定factoryBeanName和factoryMethodName会使用指定的来创建bean

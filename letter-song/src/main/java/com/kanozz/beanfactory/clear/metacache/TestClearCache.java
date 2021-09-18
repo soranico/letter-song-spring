@@ -1,15 +1,15 @@
 package com.kanozz.beanfactory.clear.metacache;
 
 import com.kanozz.beanfactory.clear.metacache.bfpp.ForceFactoryBeanFactoryPostProcessor;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestClearCache {
 
-
+	private static final Logger log = LoggerFactory.getLogger(TestClearCache.class);
 	/**
 	 *
 	 * 1. 处理器设置

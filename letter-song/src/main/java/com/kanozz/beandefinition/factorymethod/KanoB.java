@@ -1,17 +1,17 @@
 package com.kanozz.beandefinition.factorymethod;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 class KanoB {
-
+	private static final Logger log = LoggerFactory.getLogger(KanoB.class);
 
 	KanoB(){
-		log.info("KanoB create");
+//		log.info("KanoB create");
 	}
 
 	KanoB createKanoB(){
-		log.info("start create kanoB");
+//		log.info("start create kanoB");
 		return new KanoB();
 	}
 

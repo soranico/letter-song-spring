@@ -1,11 +1,11 @@
 package com.kanozz.configclass.parse.imported.selector;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
-@Slf4j
 class KanoB implements ImportSelector {
-
+	private static final Logger log = LoggerFactory.getLogger(KanoB.class);
 	KanoB(){
 		log.info("KanoB create");
 	}

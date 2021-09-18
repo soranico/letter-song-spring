@@ -69,6 +69,10 @@ public class SourceFilteringListener implements GenericApplicationListener {
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
+		/**
+		 * 发布的数据源是注册的数据源才会触发观察者
+		 * @see org.springframework.web.servlet.FrameworkServlet#configureAndRefreshWebApplicationContext(org.springframework.web.context.ConfigurableWebApplicationContext)
+		 */
 		if (event.getSource() == this.source) {
 			onApplicationEventInternal(event);
 		}

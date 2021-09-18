@@ -16,39 +16,21 @@
 
 package org.springframework.web.servlet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.i18n.LocaleContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.core.log.LogFormatUtils;
+import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -56,6 +38,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.ui.context.ThemeSource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.async.WebAsyncManager;
@@ -63,9 +46,19 @@ import org.springframework.web.context.request.async.WebAsyncUtils;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.ServletRequestPathUtils;
 import org.springframework.web.util.WebUtils;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Central dispatcher for HTTP request handlers/controllers, e.g. for web UI controllers
@@ -404,7 +397,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @see org.springframework.web.WebApplicationInitializer
 	 */
 	public DispatcherServlet(WebApplicationContext webApplicationContext) {
+		/**
+		 * 设置spring容器为mvc 容器
+		 */
 		super(webApplicationContext);
+
 		setDispatchOptionsRequest(true);
 	}
 
@@ -486,6 +483,11 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	@Override
 	protected void onRefresh(ApplicationContext context) {
+		/**
+		 * 会在spring完成初始化之后回调
+		 * 观察者默认
+		 * @see AbstractApplicationContext#finishRefresh()
+		 */
 		initStrategies(context);
 	}
 
@@ -497,7 +499,13 @@ public class DispatcherServlet extends FrameworkServlet {
 		initMultipartResolver(context);
 		initLocaleResolver(context);
 		initThemeResolver(context);
+		/**
+		 * 初始化HandlerMapping
+		 */
 		initHandlerMappings(context);
+		/**
+		 * 初始化HandlerAdapter
+		 */
 		initHandlerAdapters(context);
 		initHandlerExceptionResolvers(context);
 		initRequestToViewNameTranslator(context);
@@ -939,6 +947,10 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		// Make framework objects available to handlers and view objects.
+		/**
+		 * 添加属性到request
+		 * 添加了 当前spring的环境 mvc
+		 */
 		request.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, getWebApplicationContext());
 		request.setAttribute(LOCALE_RESOLVER_ATTRIBUTE, this.localeResolver);
 		request.setAttribute(THEME_RESOLVER_ATTRIBUTE, this.themeResolver);
@@ -960,6 +972,10 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		try {
+			/**
+			 * 真正进行处理
+			 *
+			 */
 			doDispatch(request, response);
 		}
 		finally {
@@ -1032,10 +1048,17 @@ public class DispatcherServlet extends FrameworkServlet {
 			Exception dispatchException = null;
 
 			try {
+				/**
+				 *  处理多媒体文件上传
+				 */
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
 				// Determine handler for the current request.
+				/**
+				 * 获取处理请求的Handler
+				 * Handler 是 url 和 方法映射
+				 */
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -1252,6 +1275,19 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	@Nullable
 	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+		/**
+		 * 在 WebMvcConfigurationSupport 中 通过 @Bean 注入容器中
+		 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
+		 * 然后通过事件回调完成初始化
+		 * @see ContextRefreshListener#onApplicationEvent(ContextRefreshedEvent)
+		 *
+		 * RequestMappingHandlerMapping
+		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+		 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#requestMappingHandlerMapping(ContentNegotiationManager, FormattingConversionService, ResourceUrlProvider)
+		 *
+		 *
+		 *
+		 */
 		if (this.handlerMappings != null) {
 			for (HandlerMapping mapping : this.handlerMappings) {
 				HandlerExecutionChain handler = mapping.getHandler(request);

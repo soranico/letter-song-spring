@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 class KanoA {
 
 	public void kano(){
-		log.info("kanoA kano");
+//		log.info("kanoA kano");
 	}
 
 }

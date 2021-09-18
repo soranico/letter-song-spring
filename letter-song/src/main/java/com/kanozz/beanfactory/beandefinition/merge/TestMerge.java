@@ -1,13 +1,13 @@
 package com.kanozz.beanfactory.beandefinition.merge;
 
 import com.kanozz.beanfactory.clear.metacache.bfpp.ForceFactoryBeanFactoryPostProcessor;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestMerge {
-
+	private static final Logger log = LoggerFactory.getLogger(TestMerge.class);
 	/**
 	 * 1. addBeanFactoryPostProcessor注册的bdrpp执行前不需要
 	 * 合并,因为bdrpp只能注册和修改已经有的BD

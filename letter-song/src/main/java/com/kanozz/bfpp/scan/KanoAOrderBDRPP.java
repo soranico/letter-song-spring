@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 class KanoAOrderBDRPP implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
 
 	KanoAOrderBDRPP(){
-		log.info("KanoAPriorityOrderBDRPP create");
+//		log.info("KanoAPriorityOrderBDRPP create");
 	}
 
 

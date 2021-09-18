@@ -4,6 +4,8 @@ import com.kanozz.fourbpp.instantiationawarebpp.afterinstantiation.TestPostProce
 import com.kanozz.fourbpp.instantiationawarebpp.beforeintantiation.TestPostProcessBeforeInstantiation;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
@@ -26,7 +28,7 @@ import java.util.List;
  */
 @Slf4j
 public class Test4CategoryBpp {
-
+	private static final Logger log = LoggerFactory.getLogger(Test4CategoryBpp.class);
 	private <E> List<E> getBeanList(AnnotationConfigApplicationContext context,Class<E> type){
 		String[] beanNamesForType = context.getBeanNamesForType(type);
 		List<E> beanList = new ArrayList<E>();

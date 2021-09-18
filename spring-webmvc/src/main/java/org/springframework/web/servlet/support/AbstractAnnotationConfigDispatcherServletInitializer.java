@@ -56,6 +56,9 @@ public abstract class AbstractAnnotationConfigDispatcherServletInitializer
 		Class<?>[] configClasses = getRootConfigClasses();
 		if (!ObjectUtils.isEmpty(configClasses)) {
 			AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+			/**
+			 * 注册成BD
+			 */
 			context.register(configClasses);
 			return context;
 		}
@@ -71,6 +74,9 @@ public abstract class AbstractAnnotationConfigDispatcherServletInitializer
 	 */
 	@Override
 	protected WebApplicationContext createServletApplicationContext() {
+		/**
+		 * 创建 mvc 环境
+		 */
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 		Class<?>[] configClasses = getServletConfigClasses();
 		if (!ObjectUtils.isEmpty(configClasses)) {

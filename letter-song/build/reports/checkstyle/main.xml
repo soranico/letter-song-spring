@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.22">
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/asm/Kano.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/asm/KanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/asm/KanoAnnotationVisitor.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="7" severity="error" message="导入 &apos;java.lang.annotation.Annotation&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="35" severity="error" message="Line has leading space characters; indentation should be performed with tabs only." source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+<error line="42" column="17" severity="error" message="第 3 个字符 &apos;}&apos; 应独占一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="42" column="35" severity="error" message="Single letter catch variable (use &quot;ex&quot; instead)." source="io.spring.javaformat.checkstyle.check.SpringCatchCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/asm/KanoClassVisitor.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.asm.AnnotationVisitor&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="8" severity="error" message="导入 &apos;java.util.ArrayList&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="34" column="24" severity="error" message="对实例属性 &apos;annotations&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+<error line="38" column="24" severity="error" message="对实例属性 &apos;className&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/asm/TestAsm.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.asm.AnnotationVisitor&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="10" severity="error" message="导入 &apos;java.io.InputStream&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="20" severity="error" message="Javadoc 描述块不应为空。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="27" column="9" severity="error" message="Test method &apos;testVisitorClass&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/callbackmethod/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.InitializingBean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/callbackmethod/KanoB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.InitializingBean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/callbackmethod/KanoC.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.InitializingBean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="7" severity="error" message="导入 &apos;javax.annotation.PostConstruct&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/callbackmethod/KanoConfig.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/callbackmethod/TestCallBack.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="4" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="6" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="7" severity="error" message="&apos;org.springframework.beans.factory.support.AbstractBeanDefinition&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="13" severity="error" message="导入 &apos;java.lang.reflect.Field&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="18" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="24" column="9" severity="error" message="Test method &apos;testInterface&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="37" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="42" column="9" severity="error" message="Test method &apos;testManual&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="57" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="62" column="9" severity="error" message="Test method &apos;testAnnotation&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="79" severity="error" message="Javadoc 描述块不应为空。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="84" column="9" severity="error" message="Test method &apos;testCheckCallBack&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="100" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="104" column="9" severity="error" message="Test method &apos;testBeanCallBack&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/checkdependency/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/checkdependency/KanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/checkdependency/KanoC.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/checkdependency/KanoD.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/checkdependency/TestDependency.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.MutablePropertyValues&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="13" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="26" column="9" severity="error" message="Test method &apos;testCheckObject&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="41" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="47" column="9" severity="error" message="Test method &apos;testCheckSimple&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="63" column="9" severity="error" message="Test method &apos;testCheckAll&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/factorymethod/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" column="1" severity="error" message="工具类应隐藏 public 构造器。" source="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/factorymethod/KanoB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/factorymethod/TestFactoryMethod.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.factory.config.BeanDefinition&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="13" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="22" column="9" severity="error" message="Test method &apos;testHaveBeanAndMethod&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="34" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="40" column="9" severity="error" message="Test method &apos;testJustBean&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="59" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="67" column="9" severity="error" message="Test method &apos;testJustMethod&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/paternity/KanoChild.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/paternity/KanoParent.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beandefinition/paternity/TestPaternity.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.factory.config.ConfigurableBeanFactory&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="13" column="9" severity="error" message="Test method &apos;testBDPaternity&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="31" column="9" severity="error" message="Test method &apos;testSameName&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/beandefinition/merge/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/beandefinition/merge/KanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/beandefinition/merge/TestMerge.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="4" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="6" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="7" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="26" column="9" severity="error" message="Test method &apos;testMergeBD&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/beandefinition/merge/bfpp/ForceFactoryBeanFactoryPostProcessor.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="10" column="9" severity="error" message="缺少 Javadoc 。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/clear/metacache/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/clear/metacache/KanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/clear/metacache/KanoC.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/clear/metacache/KanoD.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/clear/metacache/TestClearCache.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="4" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="6" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="7" severity="error" message="&apos;org.springframework.beans.factory.support.RootBeanDefinition&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="26" column="9" severity="error" message="Test method &apos;testClearCache&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="40" column="9" severity="error" message="Test method &apos;testForceAndRegisterBD&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/clear/metacache/bfpp/ForceFactoryBeanFactoryPostProcessor.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="10" column="9" severity="error" message="缺少 Javadoc 。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/dependency/ChangeDependencyBeanPostProcessor.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="9" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="12" severity="error" message="缺少 @author 标签。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"/>
+<error line="14" column="9" severity="error" message="缺少 Javadoc 。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/dependency/Kano.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/dependency/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" severity="error" message="导入 &apos;javax.annotation.Resource&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="20" column="24" severity="error" message="对实例属性 &apos;kanoImplB&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/dependency/KanoImplA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/dependency/KanoImplB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/dependency/KanoImplC.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="工具类应隐藏 public 构造器。" source="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/dependency/TestResolveDepency.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="24" column="9" severity="error" message="Test method &apos;testRegisterResolvableDependency&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/ingore/ChangeAutowireModelBeanPostProcessor.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="9" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="12" severity="error" message="缺少 @author 标签。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"/>
+<error line="14" column="9" severity="error" message="缺少 Javadoc 。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/ingore/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.context.ApplicationContextAware&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="14" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/ingore/KanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/ingore/TestIgnoreWithAutowire.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="19" column="9" severity="error" message="Test method &apos;testIgnoreDependencyType&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/metacache/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/metacache/KanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/metacache/KanoC.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/metacache/TestMetaCache.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="18" column="9" severity="error" message="Test method &apos;testMataCache&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/KanoBeanNameGenerator.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="7" severity="error" message="导入 &apos;java.util.concurrent.atomic.AtomicInteger&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/KanoConfig.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.factory.BeanNameAware&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/KanoMybatisConfig.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="7" severity="error" message="&apos;org.springframework.context.annotation.Bean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" severity="error" message="导入 &apos;javax.sql.DataSource&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/TestScanner.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="4" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.factory.support.BeanDefinitionRegistry&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="15" severity="error" message="Javadoc 描述块不应为空。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="26" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="38" column="9" severity="error" message="Test method &apos;testScanner&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="50" severity="error" message="Javadoc 描述块不应为空。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="85" column="9" severity="error" message="Test method &apos;testMyBatisScanner&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/ann/KanoC.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.BeanNameAware&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/bean/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.BeanNameAware&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/bean/KanoB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.BeanNameAware&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/beanfactory/scanner/mybatis/KanoMapper.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bfpp/TestBeanFactoryPostProcessor.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="28" column="9" severity="error" message="Test method &apos;testBFPPPriority&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bfpp/priority/KanoAppContextOrderedBfpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.BeansException&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bfpp/priority/TestImportRegistrar.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.factory.support.AbstractBeanDefinition&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="28" column="9" severity="error" message="Test method &apos;testRegImportRegistrar&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bfpp/scan/KanoABFPP.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.BeansException&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bfpp/scan/KanoAOrderBDRPP.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.BeansException&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bfpp/scan/KanoAPriorityOrderBDRPP.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.BeansException&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bfpp/scan/KanoBPriorityOrderBDRPP.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.BeansException&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bpp/priority/KanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" severity="error" message="&apos;org.springframework.stereotype.Component&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bpp/priority/KanoAppContextOrderedBpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bpp/priority/KanoAspect.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" severity="error" message="&apos;org.springframework.context.annotation.EnableAspectJAutoProxy&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bpp/priority/KanoAutoOrderedBpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="7" severity="error" message="导入 &apos;javax.annotation.PostConstruct&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="16" column="17" severity="error" message="对实例属性 &apos;kanoA&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/bpp/priority/TestPriorityBpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.factory.config.AutowireCapableBeanFactory&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="12" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="30" column="9" severity="error" message="Test method &apos;testAspectNotEffect&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="40" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="52" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="55" column="9" severity="error" message="Test method &apos;testNotEffectAutowired&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/configuration/KanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/configuration/KanoComponent.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" severity="error" message="Line has leading space characters; indentation should be performed with tabs only." source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/configuration/KanoConfiguration.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/configuration/KanoConfigurationWithBean.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/configuration/KanoConfigurationWithExclude.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/configuration/KanoWithBean.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/configuration/TestConfiguration.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.beans.factory.config.BeanDefinition&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="12" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="18" column="9" severity="error" message="Test method &apos;testConfiguration&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="28" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="32" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="36" column="9" severity="error" message="Test method &apos;testConfigurationWithExclude&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="45" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="46" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="51" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="53" column="9" severity="error" message="Test method &apos;testConfigurationWithBean&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="61" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="62" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="65" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="66" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="67" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+<error line="69" column="9" severity="error" message="Test method &apos;testBean&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/KanoImportBeanDefinitionRegistrar.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/normal/KanoConfiguration.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/normal/KanoNormal.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/normal/TestImport.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="5" severity="error" message="导入 &apos;java.util.Collection&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="10" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="19" column="9" severity="error" message="Test method &apos;testImportNormal&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/selector/KanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/selector/KanoB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.context.annotation.ImportSelector&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/selector/KanoConfiguration.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/selector/KanoImportSelector.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" severity="error" message="导入 &apos;java.util.function.Predicate&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/selector/KanoScanImportSelector.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="7" severity="error" message="导入 &apos;java.util.function.Predicate&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/imported/selector/TestImportSelector.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="8" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="26" column="9" severity="error" message="Test method &apos;testImportSelector&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/inner/KanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/inner/KanoConfigurationWithInner.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/inner/KanoConfigurationWithStaticInner.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/inner/TestConfigurationWithInner.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="9" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="15" column="9" severity="error" message="Test method &apos;testParseInner&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="24" column="9" severity="error" message="Test method &apos;testParseStaticInner&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/property/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.annotation.Value&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/property/KanoConfigurationProperty.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="7" severity="error" message="Annotation style must be &apos;COMPACT&apos;." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/property/KanoConfigurationSameNameProperty.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="8" severity="error" message="Annotation style must be &apos;COMPACT&apos;." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/configclass/parse/property/TestConfigurationProperty.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="9" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="20" column="9" severity="error" message="Test method &apos;testParseProperty&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="27" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="39" column="9" severity="error" message="Test method &apos;testParseSameNameProperty&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/construct/KanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/construct/KanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" severity="error" message="Line has leading space characters; indentation should be performed with tabs only." source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/construct/KanoC.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" severity="error" message="Line has leading space characters; indentation should be performed with tabs only." source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/construct/KanoConfig.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/construct/KanoD.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="5" severity="error" message="Line has leading space characters; indentation should be performed with tabs only." source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpSinglelineJavaCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/construct/TestConstruct.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="12" column="9" severity="error" message="Test method &apos;testConstruct&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="27" column="9" severity="error" message="Test method &apos;testConstructWithBean&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/cycle/KanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/cycle/KanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/cycle/TestCycle.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="9" column="9" severity="error" message="Test method &apos;testCycle&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/factorybean/KanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/factorybean/KanoAspect.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/factorybean/KanoFactoryBeanA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/factorybean/TestFactoryBean.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="10" column="9" severity="error" message="Test method &apos;testProxy&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/BppA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/BppB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/BppConfig.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/Test4CategoryBpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="6" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="8" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="9" severity="error" message="&apos;org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="15" severity="error" message="导入 &apos;java.util.ArrayList&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="18" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="29" severity="error" message="缺少 @author 标签。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"/>
+<error line="62" column="9" severity="error" message="Test method &apos;testInstantiationAwareBeanPostProcessor&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="72" column="9" severity="error" message="Test method &apos;testSmartInstantiationAwareBeanPostProcessor&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="83" column="9" severity="error" message="Test method &apos;testDestructionAwareBeanPostProcessor&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="95" column="9" severity="error" message="Test method &apos;testMergedBeanDefinitionPostProcessor&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/afterinstantiation/AfterBppA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/afterinstantiation/AfterBppB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/afterinstantiation/AfterBppC.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/afterinstantiation/AfterInstantiationBpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/afterinstantiation/TestPostProcessAfterInstantiation.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="22" column="9" severity="error" message="Test method &apos;testPostProcessAfterInstantiation&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="26" column="66" severity="error" message="Lambda argument has unnecessary parentheses." source="io.spring.javaformat.checkstyle.check.SpringLambdaCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/beforeintantiation/BeforeBppA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.InitializingBean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/beforeintantiation/BeforeBppB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.InitializingBean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/beforeintantiation/BeforeInstantiationBpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/fourbpp/instantiationawarebpp/beforeintantiation/TestPostProcessBeforeInstantiation.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="8" column="9" severity="error" message="Test method &apos;testPostProcessBeforeInstantiation&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/isconfigbean/IsConfigKanoA.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/isconfigbean/IsConfigKanoB.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/isconfigbean/IsConfigKanoC.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/isconfigbean/TestIsConfigBean.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="9" column="9" severity="error" message="Test method &apos;testIsConfigBean&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="15" severity="error" message="当前行匹配非法表达式： &apos;Trailing whitespace&apos;。" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/lazy/LazyKanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="17" column="24" severity="error" message="对实例属性 &apos;lazyKanoB&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/lazy/LazyKanoB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.transaction.annotation.EnableTransactionManagement&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/lazy/LazyKanoC.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="11" column="24" severity="error" message="对实例属性 &apos;lazyKanoB&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/lazy/TestLazyInject.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" column="9" severity="error" message="Test method &apos;testLazy&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/listener/Kano.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/listener/KanoApplicationListenerBpp.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="17" column="67" severity="error" message="对实例属性 &apos;applicationContext&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/listener/KanoAspect.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/listener/KanoConfiguration.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="7" severity="error" message="&apos;org.springframework.context.annotation.ComponentScan&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/listener/KanoListenerAnnotation.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.context.event.ContextRefreshedEvent&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/listener/KanoListenerImpl.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.context.ApplicationListener&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/listener/TestListener.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="4" severity="error" message="&apos;org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="14" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="31" column="9" severity="error" message="Test method &apos;testProxySameListener&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="41" severity="error" message="Javadoc 首句应以句号结尾。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocStyleCheck"/>
+<error line="52" column="9" severity="error" message="Test method &apos;testAnnotationListener&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/mvc/zero/KanoMvcConfig.java">
+<error line="1" severity="error" message="header.missing" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/mvc/zero/McvTest.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="6" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="8" severity="error" message="导入 &apos;java.io.File&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="10" column="14" severity="error" message="Class name &apos;McvTest&apos; must not end with &apos;Test&apos; (checked pattern &apos;^[A-Z][a-zA-Z0-9_]*(?&lt;!Test)$&apos;)." source="com.puppycrawl.tools.checkstyle.checks.naming.TypeNameCheck"/>
+<error line="12" column="9" severity="error" message="Test method &apos;testZero&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="27" column="17" severity="error" message="第 3 个字符 &apos;}&apos; 应独占一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="27" column="35" severity="error" message="Single letter catch variable (use &quot;ex&quot; instead)." source="io.spring.javaformat.checkstyle.check.SpringCatchCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/schedule/QuartzKanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="6" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="7" severity="error" message="&apos;org.springframework.scheduling.quartz.QuartzJobBean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="9" severity="error" message="导入 &apos;javax.annotation.PostConstruct&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="10" severity="error" message="导入 &apos;java.util.concurrent.TimeUnit&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="25" column="17" severity="error" message="第 3 个字符 &apos;}&apos; 应独占一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="25" column="35" severity="error" message="Single letter catch variable (use &quot;ex&quot; instead)." source="io.spring.javaformat.checkstyle.check.SpringCatchCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/schedule/QuartzKanoConfig.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" severity="error" message="不应使用 &apos;.*&apos; 形式的导入 - org.quartz.* 。" source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="5" severity="error" message="&apos;org.springframework.context.annotation.Bean&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/schedule/TestQuartzJobBean.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="4" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" severity="error" message="&apos;org.springframework.context.annotation.AnnotationConfigApplicationContext&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="7" severity="error" message="导入 &apos;java.util.Scanner&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" column="9" severity="error" message="Test method &apos;testQuartzJobBean&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/transaction/TestTransaction.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="3" column="1" severity="error" message="非法导入： org.junit.Test 。" source="bannedJUnit4Imports"/>
+<error line="3" column="8" severity="error" message="Import &apos;org.junit.Test&apos; should not be used in a JUnit 5 test." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="5" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="6" severity="error" message="&apos;org.springframework.cglib.core.DebuggingClassWriter&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="10" severity="error" message="导入 &apos;java.lang.reflect.Method&apos; 顺序错误。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="16" column="9" severity="error" message="Test method &apos;testTransaction&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+<error line="31" column="9" severity="error" message="Test method &apos;test&apos; should not be public." source="io.spring.javaformat.checkstyle.check.SpringJUnit5Check"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/transaction/TransactionKanoA.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.stereotype.Service&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="30" column="17" severity="error" message="对实例属性 &apos;transactionKanoB&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/transaction/TransactionKanoB.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.stereotype.Service&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="19" column="17" severity="error" message="对实例属性 &apos;transactionKanoB&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+<file name="/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanozz/transaction/TransactionKanoC.java">
+<error line="1" severity="error" message="header.mismatch" source="io.spring.javaformat.checkstyle.check.SpringHeaderCheck"/>
+<error line="4" column="1" severity="error" message="非法导入： org.slf4j.LoggerFactory 。" source="bannedImports"/>
+<error line="5" severity="error" message="&apos;org.springframework.beans.factory.annotation.Autowired&apos; 应与之前的导入语句通过空行隔开。" source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="19" column="17" severity="error" message="对实例属性 &apos;transactionKanoB&apos; 的引用需要 &quot;this.&quot;。" source="com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck"/>
+</file>
+</checkstyle>

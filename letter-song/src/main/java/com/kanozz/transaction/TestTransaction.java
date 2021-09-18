@@ -1,16 +1,16 @@
 package com.kanozz.transaction;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.cglib.core.ReflectUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.lang.reflect.Method;
 
-@Slf4j
 public class TestTransaction {
-
+	private static final Logger log = LoggerFactory.getLogger(TestTransaction.class);
 	private static final String CGLIB_CLASS_DIR = "/Users/kano/Desktop/mycode/study/spring-framework-5.3.7/letter-song/src/main/java/com/kanosd/transaction/cglib";
 
 	@Test

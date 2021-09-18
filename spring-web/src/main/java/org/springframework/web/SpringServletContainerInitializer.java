@@ -16,21 +16,16 @@
 
 package org.springframework.web;
 
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ServiceLoader;
-import java.util.Set;
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.lang.Nullable;
+import org.springframework.util.ReflectionUtils;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
-
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ReflectionUtils;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * Servlet 3.0 {@link ServletContainerInitializer} designed to support code-based
@@ -153,6 +148,17 @@ public class SpringServletContainerInitializer implements ServletContainerInitia
 				if (!waiClass.isInterface() && !Modifier.isAbstract(waiClass.getModifiers()) &&
 						WebApplicationInitializer.class.isAssignableFrom(waiClass)) {
 					try {
+						/**
+						 * 创建所有实现了 WebApplicationInitializer 接口的实例
+						 *
+						 * 默认有
+						 * @see org.springframework.web.context.AbstractContextLoaderInitializer
+						 * @see org.springframework.web.servlet.support.AbstractDispatcherServletInitializer
+						 * @see org.springframework.web.server.adapter.AbstractReactiveWebInitializer
+						 * @see org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer
+						 *
+						 *
+						 */
 						initializers.add((WebApplicationInitializer)
 								ReflectionUtils.accessibleConstructor(waiClass).newInstance());
 					}
@@ -162,7 +168,10 @@ public class SpringServletContainerInitializer implements ServletContainerInitia
 				}
 			}
 		}
-
+		/**
+		 * 默认实现都是抽象的
+		 * 所以这里不会执行
+		 */
 		if (initializers.isEmpty()) {
 			servletContext.log("No Spring WebApplicationInitializer types detected on classpath");
 			return;

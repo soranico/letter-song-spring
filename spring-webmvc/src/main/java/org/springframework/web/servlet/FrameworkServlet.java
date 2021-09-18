@@ -16,28 +16,8 @@
 
 package org.springframework.web.servlet;
 
-import java.io.IOException;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationContextException;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.*;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.SourceFilteringListener;
 import org.springframework.context.i18n.LocaleContext;
@@ -69,6 +49,20 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.WebUtils;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 /**
  * Base servlet for Spring's web framework. Provides integration with
@@ -558,6 +552,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #setContextConfigLocation
 	 */
 	protected WebApplicationContext initWebApplicationContext() {
+		/**
+		 * 从 web容器上下文中拿到 spring环境 在刷新 spring环境时设置进去的
+		 * @see ContextLoader#initWebApplicationContext(ServletContext)
+		 */
 		WebApplicationContext rootContext =
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		WebApplicationContext wac = null;
@@ -570,11 +568,24 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 				if (!cwac.isActive()) {
 					// The context has not yet been refreshed -> provide services such as
 					// setting the parent context, setting the application context id, etc
+					/**
+					 * 设置mvc环境的父容器
+					 */
 					if (cwac.getParent() == null) {
 						// The context instance was injected without an explicit parent -> set
 						// the root application context (if any; may be null) as the parent
 						cwac.setParent(rootContext);
 					}
+					/**
+					 * 刷新mvc环境
+					 * 会处理 @EnableWebMvc注解
+					 *
+					 * 添加观察者
+					 * @see SourceFilteringListener
+					 *
+					 * 刷新环境会发布环境刷新完成事件
+					 * @see ContextRefreshedEvent
+					 */
 					configureAndRefreshWebApplicationContext(cwac);
 				}
 			}
@@ -687,6 +698,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		wac.setServletContext(getServletContext());
 		wac.setServletConfig(getServletConfig());
 		wac.setNamespace(getNamespace());
+		/**
+		 * 添加观察者监听mvc容器完成事件
+		 */
 		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
 
 		// The wac environment's #initPropertySources will be called in any case when the context
@@ -699,6 +713,11 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 		postProcessWebApplicationContext(wac);
 		applyInitializers(wac);
+		/**
+		 * 刷新mvc环境
+		 * 处理 @EnableWebMvc注解
+		 * @see org.springframework.web.servlet.config.annotation.EnableWebMvc
+		 */
 		wac.refresh();
 	}
 
@@ -746,6 +765,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see ConfigurableApplicationContext#refresh()
 	 */
 	protected void applyInitializers(ConfigurableApplicationContext wac) {
+		/**
+		 * 完成mvc 环境的 global 和 context 的初始化
+		 */
 		String globalClassNames = getServletContext().getInitParameter(ContextLoader.GLOBAL_INITIALIZER_CLASSES_PARAM);
 		if (globalClassNames != null) {
 			for (String className : StringUtils.tokenizeToStringArray(globalClassNames, INIT_PARAM_DELIMITERS)) {
@@ -905,7 +927,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	@Override
 	protected final void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		/**
+		 * 处理请求
+		 */
 		processRequest(request, response);
 	}
 
@@ -990,19 +1014,36 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 		long startTime = System.currentTimeMillis();
 		Throwable failureCause = null;
-
+		/**
+		 * @see SimpleLocaleContext
+		 * 用于存放国际化
+		 *
+		 */
 		LocaleContext previousLocaleContext = LocaleContextHolder.getLocaleContext();
 		LocaleContext localeContext = buildLocaleContext(request);
 
+		/**
+		 * 用于存放 request 和 response 到 ThreadLocal
+		 * 先获取之前的,如果配置继承会使用继承的ThreadLocal
+		 * @see ServletRequestAttributes
+		 */
 		RequestAttributes previousAttributes = RequestContextHolder.getRequestAttributes();
 		ServletRequestAttributes requestAttributes = buildRequestAttributes(request, response, previousAttributes);
-
+		/**
+		 * 异步管理器
+		 * TODO
+		 */
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 		asyncManager.registerCallableInterceptor(FrameworkServlet.class.getName(), new RequestBindingInterceptor());
-
+		/**
+		 * 存放当前请求的 request 和 response 到 ThreadLocal
+		 */
 		initContextHolders(request, localeContext, requestAttributes);
 
 		try {
+			/**
+			 * 处理请求
+			 */
 			doService(request, response);
 		}
 		catch (ServletException | IOException ex) {

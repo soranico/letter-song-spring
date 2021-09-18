@@ -1,13 +1,15 @@
 package com.kanozz.beandefinition.paternity;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.support.ChildBeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TestPaternity {
-
+	private static final Logger log = LoggerFactory.getLogger(TestPaternity.class);
 	@Test
 	public void testBDPaternity() {
 		RootBeanDefinition parent = new RootBeanDefinition(KanoParent.class);

@@ -16,15 +16,15 @@
 
 package org.springframework.web.context;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.lang.Nullable;
 import org.springframework.web.WebApplicationInitializer;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletException;
 
 /**
  * Convenient base class for {@link WebApplicationInitializer} implementations
@@ -47,6 +47,10 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
+		/**
+		 * 注册 ContextLoaderListener
+		 * 用于初始化spring环境
+		 */
 		registerContextLoaderListener(servletContext);
 	}
 
@@ -57,8 +61,20 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 	 * @param servletContext the servlet context to register the listener against
 	 */
 	protected void registerContextLoaderListener(ServletContext servletContext) {
+		/**
+		 * 创建 spring的注解环境
+		 * 将返回的class注册为BD
+		 * @see org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer#getRootConfigClasses()
+		 */
 		WebApplicationContext rootAppContext = createRootApplicationContext();
 		if (rootAppContext != null) {
+			/**
+			 * 创建上下文监听器
+			 * 其中会在web容器（tomcat）启动时完成 spring环境的初始化
+			 * 这个方法会在所有Filter和Servlet初始化之前被调用
+			 * @see ContextLoaderListener#contextInitialized(ServletContextEvent)
+			 *
+			 */
 			ContextLoaderListener listener = new ContextLoaderListener(rootAppContext);
 			listener.setContextInitializers(getRootApplicationContextInitializers());
 			servletContext.addListener(listener);

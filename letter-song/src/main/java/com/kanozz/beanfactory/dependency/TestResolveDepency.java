@@ -1,12 +1,12 @@
 package com.kanozz.beanfactory.dependency;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestResolveDepency {
-
+	private static final Logger log = LoggerFactory.getLogger(TestResolveDepency.class);
 
 	/**
 	 * 为kanoB注入属性kano时，按照类型查找有两个bean,按照name查找没有

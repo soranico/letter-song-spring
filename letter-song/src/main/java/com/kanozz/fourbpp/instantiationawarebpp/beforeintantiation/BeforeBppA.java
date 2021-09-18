@@ -1,11 +1,11 @@
 package com.kanozz.fourbpp.instantiationawarebpp.beforeintantiation;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-@Slf4j
 class BeforeBppA implements InitializingBean {
-
+	private static final Logger log = LoggerFactory.getLogger(BeforeBppA.class);
 	public BeforeBppA(){
 		log.info("newInstance beforeBppA");
 	}

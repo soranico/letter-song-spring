@@ -1,14 +1,14 @@
 package com.kanozz.fourbpp.instantiationawarebpp.afterinstantiation;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestPostProcessAfterInstantiation {
-
+	private static final Logger log = LoggerFactory.getLogger(TestPostProcessAfterInstantiation.class);
 	/**
 	 *
 	 * 1. 在显示注入和自动注入模型下均不会注入AfterA的属性

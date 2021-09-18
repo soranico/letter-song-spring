@@ -1,15 +1,15 @@
 package com.kanozz.asm;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.asm.AnnotationVisitor;
 import org.springframework.asm.ClassVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 class KanoClassVisitor extends ClassVisitor {
-
+	private static final Logger log = LoggerFactory.getLogger(KanoClassVisitor.class);
 	private String className;
 
 	private List<AnnotationVisitor> annotations = new ArrayList<>(2);

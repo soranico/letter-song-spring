@@ -14,7 +14,7 @@ class KanoAspect {
 
 	@Before("execution(* com.kanozz.bpp.priority.*.*(..))")
 	public void before(){
-		log.info("before run method");
+//		log.info("before run method");
 	}
 
 }

@@ -16,15 +16,6 @@
 
 package org.springframework.web.servlet.config.annotation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -41,19 +32,11 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.ResourceRegionHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.*;
 import org.springframework.http.converter.cbor.MappingJackson2CborHttpMessageConverter;
 import org.springframework.http.converter.feed.AtomFeedHttpMessageConverter;
 import org.springframework.http.converter.feed.RssChannelHttpMessageConverter;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.http.converter.json.JsonbHttpMessageConverter;
-import org.springframework.http.converter.json.KotlinSerializationJsonHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.*;
 import org.springframework.http.converter.smile.MappingJackson2SmileHttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
@@ -76,31 +59,16 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.method.support.CompositeUriComponentsContributor;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
-import org.springframework.web.servlet.FlashMapManager;
-import org.springframework.web.servlet.HandlerAdapter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.HandlerMapping;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.RequestToViewNameTranslator;
-import org.springframework.web.servlet.ThemeResolver;
-import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.*;
 import org.springframework.web.servlet.function.support.HandlerFunctionAdapter;
 import org.springframework.web.servlet.function.support.RouterFunctionMapping;
-import org.springframework.web.servlet.handler.AbstractHandlerMapping;
-import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
-import org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor;
-import org.springframework.web.servlet.handler.HandlerExceptionResolverComposite;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.springframework.web.servlet.handler.*;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter;
 import org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter;
 import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
-import org.springframework.web.servlet.mvc.method.annotation.JsonViewRequestBodyAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.JsonViewResponseBodyAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.*;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.servlet.resource.ResourceUrlProviderExposingInterceptor;
@@ -111,6 +79,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.ViewResolverComposite;
 import org.springframework.web.util.UrlPathHelper;
 import org.springframework.web.util.pattern.PathPatternParser;
+
+import javax.servlet.ServletContext;
+import java.util.*;
 
 /**
  * This is the main class providing the configuration behind the MVC Java config.
@@ -306,18 +277,38 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,
 			@Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
 
+		/**
+		 * 添加处理 @Controller 和 @RequestMapping 的处理器
+		 * @see RequestMappingHandlerMapping
+		 * 祖父类
+		 * @see AbstractHandlerMapping
+		 */
 		RequestMappingHandlerMapping mapping = createRequestMappingHandlerMapping();
 		mapping.setOrder(0);
 		mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));
 		mapping.setContentNegotiationManager(contentNegotiationManager);
+		/**
+		 * 跨域支持
+		 */
 		mapping.setCorsConfigurations(getCorsConfigurations());
-
+		/**
+		 * 添加路径匹配
+		 * 钩子方法
+		 */
 		PathMatchConfigurer pathConfig = getPathMatchConfigurer();
 		if (pathConfig.getPatternParser() != null) {
 			mapping.setPatternParser(pathConfig.getPatternParser());
 		}
 		else {
+			/**
+			 * 添加默认的
+			 * @see UrlPathHelper
+			 */
 			mapping.setUrlPathHelper(pathConfig.getUrlPathHelperOrDefault());
+			/**
+			 * 添加默认的
+			 * @see AntPathMatcher
+			 */
 			mapping.setPathMatcher(pathConfig.getPathMatcherOrDefault());
 
 			Boolean useSuffixPatternMatch = pathConfig.isUseSuffixPatternMatch();
@@ -357,10 +348,19 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	protected final Object[] getInterceptors(
 			FormattingConversionService mvcConversionService,
 			ResourceUrlProvider mvcResourceUrlProvider) {
-
+		/**
+		 * 初始化拦截器
+		 */
 		if (this.interceptors == null) {
 			InterceptorRegistry registry = new InterceptorRegistry();
+			/**
+			 * 调用子类的钩子方法
+			 */
 			addInterceptors(registry);
+			/**
+			 * 添加两个默认的
+			 *
+			 */
 			registry.addInterceptor(new ConversionServiceExposingInterceptor(mvcConversionService));
 			registry.addInterceptor(new ResourceUrlProviderExposingInterceptor(mvcResourceUrlProvider));
 			this.interceptors = registry.getInterceptors();
@@ -525,6 +525,10 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,
 			@Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
 
+		/**
+		 * 添加处理处理
+		 *
+		 */
 		BeanNameUrlHandlerMapping mapping = new BeanNameUrlHandlerMapping();
 		mapping.setOrder(2);
 
@@ -558,11 +562,17 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	public RouterFunctionMapping routerFunctionMapping(
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,
 			@Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
-
+		/**
+		 * 添加路由
+		 * TODO 不知道用于什么
+		 */
 		RouterFunctionMapping mapping = new RouterFunctionMapping();
 		mapping.setOrder(3);
 		mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));
 		mapping.setCorsConfigurations(getCorsConfigurations());
+		/**
+		 * 添加入参解析器
+		 */
 		mapping.setMessageConverters(getMessageConverters());
 
 		PathPatternParser patternParser = getPathMatchConfigurer().getPatternParser();
@@ -665,9 +675,15 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 			@Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
 			@Qualifier("mvcConversionService") FormattingConversionService conversionService,
 			@Qualifier("mvcValidator") Validator validator) {
-
+		/**
+		 * 添加处理 RequestMappingHandler 的适配器
+		 *
+		 */
 		RequestMappingHandlerAdapter adapter = createRequestMappingHandlerAdapter();
 		adapter.setContentNegotiationManager(contentNegotiationManager);
+		/**
+		 *
+		 */
 		adapter.setMessageConverters(getMessageConverters());
 		adapter.setWebBindingInitializer(getConfigurableWebBindingInitializer(conversionService, validator));
 		adapter.setCustomArgumentResolvers(getArgumentResolvers());
@@ -860,10 +876,19 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	protected final List<HttpMessageConverter<?>> getMessageConverters() {
 		if (this.messageConverters == null) {
 			this.messageConverters = new ArrayList<>();
+			/**
+			 * 钩子方法
+			 * 添加消息转换器
+			 * 如果添加了则默认的不会生效
+			 */
 			configureMessageConverters(this.messageConverters);
 			if (this.messageConverters.isEmpty()) {
 				addDefaultHttpMessageConverters(this.messageConverters);
 			}
+			/**
+			 * 添加扩展的
+			 * 会和默认的一起生效
+			 */
 			extendMessageConverters(this.messageConverters);
 		}
 		return this.messageConverters;
@@ -898,7 +923,14 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 	 */
 	protected final void addDefaultHttpMessageConverters(List<HttpMessageConverter<?>> messageConverters) {
 		messageConverters.add(new ByteArrayHttpMessageConverter());
+		/**
+		 * 处理String的
+		 */
 		messageConverters.add(new StringHttpMessageConverter());
+		/**
+		 * 处理入参是 Resource
+		 * @see org.springframework.core.io.Resource
+		 */
 		messageConverters.add(new ResourceHttpMessageConverter());
 		messageConverters.add(new ResourceRegionHttpMessageConverter());
 		if (!shouldIgnoreXml) {
@@ -932,6 +964,9 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 		if (kotlinSerializationJsonPresent) {
 			messageConverters.add(new KotlinSerializationJsonHttpMessageConverter());
 		}
+		/**
+		 * 添加json支持
+		 */
 		if (jackson2Present) {
 			Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
 			if (this.applicationContext != null) {

@@ -2,6 +2,8 @@ package com.kanozz.beandefinition.callbackmethod;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -12,7 +14,7 @@ import java.lang.reflect.Field;
 
 @Slf4j
 public class TestCallBack {
-
+	private static final Logger log = LoggerFactory.getLogger(TestCallBack.class);
 	/**
      *
 	 * 继承接口的不需要存储回调方法
@@ -46,10 +48,10 @@ public class TestCallBack {
 		context.refresh();
 		DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
 		RootBeanDefinition kanoB = (RootBeanDefinition) factory.getMergedBeanDefinition("kanoB");
-		log.info("init method  = {}",kanoB.getInitMethodName());
+//		log.info("init method  = {}",kanoB.getInitMethodName());
 		Field field = RootBeanDefinition.class.getDeclaredField("externallyManagedInitMethods");
 		field.setAccessible(true);
-		log.info("externallyManagedInitMethods = {}",field.get(kanoB));
+//		log.info("externallyManagedInitMethods = {}",field.get(kanoB));
 	}
 
 	/**
@@ -67,10 +69,10 @@ public class TestCallBack {
 		context.refresh();
 		DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
 		RootBeanDefinition kanoC = (RootBeanDefinition) factory.getMergedBeanDefinition("kanoC");
-		log.info("init method  = {}",kanoC.getInitMethodName());
+//		log.info("init method  = {}",kanoC.getInitMethodName());
 		Field field = RootBeanDefinition.class.getDeclaredField("externallyManagedInitMethods");
 		field.setAccessible(true);
-		log.info("externallyManagedInitMethods = {}",field.get(kanoC));
+//		log.info("externallyManagedInitMethods = {}",field.get(kanoC));
 	}
 
 
@@ -89,10 +91,10 @@ public class TestCallBack {
 		context.refresh();
 		DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
 		RootBeanDefinition kanoC = (RootBeanDefinition) factory.getMergedBeanDefinition("kanoC");
-		log.info("init method  = {}",kanoC.getInitMethodName());
+//		log.info("init method  = {}",kanoC.getInitMethodName());
 		Field field = RootBeanDefinition.class.getDeclaredField("externallyManagedInitMethods");
 		field.setAccessible(true);
-		log.info("externallyManagedInitMethods = {}",field.get(kanoC));
+//		log.info("externallyManagedInitMethods = {}",field.get(kanoC));
 	}
 
 	/**
@@ -106,10 +108,10 @@ public class TestCallBack {
 		context.refresh();
 		DefaultListableBeanFactory factory = (DefaultListableBeanFactory) context.getBeanFactory();
 		RootBeanDefinition kanoA = (RootBeanDefinition) factory.getMergedBeanDefinition("kanoA");
-		log.info("init method  = {}",kanoA.getInitMethodName());
+//		log.info("init method  = {}",kanoA.getInitMethodName());
 		Field field = RootBeanDefinition.class.getDeclaredField("externallyManagedInitMethods");
 		field.setAccessible(true);
-		log.info("externallyManagedInitMethods = {}",field.get(kanoA));
+//		log.info("externallyManagedInitMethods = {}",field.get(kanoA));
 	}
 
 

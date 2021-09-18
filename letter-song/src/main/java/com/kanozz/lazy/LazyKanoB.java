@@ -1,17 +1,17 @@
 package com.kanozz.lazy;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Transactional
-@Slf4j
 @EnableTransactionManagement
 class LazyKanoB {
-
+	private static final Logger log = LoggerFactory.getLogger(LazyKanoB.class);
 	public String lazy(){
-		log.info("there have proxy");
+//		log.info("there have proxy");
 		return "lazy";
 	}
 }

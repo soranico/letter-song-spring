@@ -1,13 +1,15 @@
 package com.kanozz.beandefinition.checkdependency;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TestDependency {
-
+	private static final Logger log = LoggerFactory.getLogger(TestDependency.class);
 	/**
 	 *
 	 * 创建bean需要检查依赖项,只坚持对象

@@ -1,13 +1,13 @@
 package com.kanozz.beanfactory.metacache;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestMetaCache {
 
-
+	private static final Logger log = LoggerFactory.getLogger(TestMetaCache.class);
 	/**
 	 * {@link org.springframework.beans.factory.support.DefaultListableBeanFactory#getBeanNamesForType(Class, boolean, boolean)}
 	 * 第一次A注入B 此时B 没有在allBeanNamesByType缓存中,会去遍历所有BD找到此类型的缓存

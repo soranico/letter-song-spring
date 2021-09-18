@@ -1,12 +1,12 @@
 package com.kanozz.lazy;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestLazyInject {
-
+	private static final Logger log = LoggerFactory.getLogger(TestLazyInject.class);
 
 	@Test
 	public void testLazy(){
@@ -17,7 +17,7 @@ public class TestLazyInject {
 		LazyKanoC lazyKanoC = context.getBean(LazyKanoC.class);
 		LazyKanoA lazyKanoA = context.getBean(LazyKanoA.class);
 
-		log.info("LazyKanoB same = {}",
-				lazyKanoA.getLazyKanoB() == lazyKanoC.getLazyKanoB());
+//		log.info("LazyKanoB same = {}",
+//				lazyKanoA.getLazyKanoB() == lazyKanoC.getLazyKanoB());
 	}
 }

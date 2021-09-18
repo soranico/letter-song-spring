@@ -11,7 +11,7 @@ import org.springframework.core.PriorityOrdered;
 class KanoBPriorityOrderBDRPP implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
 
 	KanoBPriorityOrderBDRPP(){
-		log.info("KanoBPriorityOrderBDRPP create");
+//		log.info("KanoBPriorityOrderBDRPP create");
 	}
 
 

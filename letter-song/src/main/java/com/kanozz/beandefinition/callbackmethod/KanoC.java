@@ -1,24 +1,24 @@
 package com.kanozz.beandefinition.callbackmethod;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.annotation.PostConstruct;
 
-@Slf4j
 class KanoC implements InitializingBean {
-
+	private static final Logger log = LoggerFactory.getLogger(KanoC.class);
 	@PostConstruct
 	public void init(){
-		log.info("annotation init");
+//		log.info("annotation init");
 	}
 
 	public void manualInit(){
-		log.info("manualInit");
+//		log.info("manualInit");
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		log.info("InitializingBean - afterPropertiesSet");
+//		log.info("InitializingBean - afterPropertiesSet");
 	}
 }

@@ -1,14 +1,14 @@
 package com.kanozz.construct;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestConstruct {
-
+	private static final Logger log = LoggerFactory.getLogger(TestConstruct.class);
 	@Test
 	public void testConstruct() {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
@@ -20,7 +20,7 @@ public class TestConstruct {
 		context.refresh();
 
 		KanoA kanoA = context.getBean(KanoA.class);
-		log.info("kanoA = {}",kanoA.toString());
+//		log.info("kanoA = {}",kanoA.toString());
 	}
 
 
@@ -30,6 +30,6 @@ public class TestConstruct {
 		context.register( KanoB.class, KanoC.class,KanoConfig.class);
 		context.refresh();
 		KanoD kanoD = context.getBean(KanoD.class);
-		log.info("kanoD = {}",kanoD.toString());
+//		log.info("kanoD = {}",kanoD.toString());
 	}
 }

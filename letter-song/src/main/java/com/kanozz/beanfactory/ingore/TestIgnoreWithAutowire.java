@@ -1,12 +1,13 @@
 package com.kanozz.beanfactory.ingore;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@Slf4j
 public class TestIgnoreWithAutowire {
 
+	private static final Logger log = LoggerFactory.getLogger(TestIgnoreWithAutowire.class);
 	/**
 	 * spring默认的bean注册模型为
 	 * {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory.AUTOWIRE_NO}
@@ -22,7 +23,7 @@ public class TestIgnoreWithAutowire {
 		context.addBeanFactoryPostProcessor(ChangeAutowireModelBeanPostProcessor.INSTANCE);
 		context.refresh();
 		KanoA kanoA = context.getBean(KanoA.class);
-		log.info("kanoA = {}",kanoA);
+		log.info("kanoA = {}");
 	}
 
 

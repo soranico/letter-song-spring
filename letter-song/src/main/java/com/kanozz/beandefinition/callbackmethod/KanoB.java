@@ -1,11 +1,11 @@
 package com.kanozz.beandefinition.callbackmethod;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-@Slf4j
 class KanoB implements InitializingBean {
-
+	private static final Logger log = LoggerFactory.getLogger(KanoB.class);
 	public void manualInit(){
 		log.info("manualInit");
 	}

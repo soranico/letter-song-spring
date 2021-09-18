@@ -16,18 +16,8 @@
 
 package org.springframework.web.context;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.ServletContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextException;
@@ -42,6 +32,14 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Performs the actual initialization work for the root application context.
@@ -275,6 +273,10 @@ public class ContextLoader {
 		try {
 			// Store context in local instance variable, to guarantee that
 			// it is available on ServletContext shutdown.
+			/**
+			 * 这个不会进在创建 ContextLoaderListener 的时候已经将环境传入进来
+			 * @see AbstractContextLoaderInitializer#registerContextLoaderListener(ServletContext)
+			 */
 			if (this.context == null) {
 				this.context = createWebApplicationContext(servletContext);
 			}
@@ -283,15 +285,28 @@ public class ContextLoader {
 				if (!cwac.isActive()) {
 					// The context has not yet been refreshed -> provide services such as
 					// setting the parent context, setting the application context id, etc
+					/**
+					 * 没有父容器
+					 */
 					if (cwac.getParent() == null) {
 						// The context instance was injected without an explicit parent ->
 						// determine parent for root web application context, if any.
+						/**
+						 * 加载父容器
+						 * 对于spring环境而言是空
+						 */
 						ApplicationContext parent = loadParentContext(servletContext);
 						cwac.setParent(parent);
 					}
+					/**
+					 * 刷新spring容器
+					 */
 					configureAndRefreshWebApplicationContext(cwac, servletContext);
 				}
 			}
+			/**
+			 * 添加spring环境到 web容器上下文
+			 */
 			servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
 
 			ClassLoader ccl = Thread.currentThread().getContextClassLoader();
@@ -394,10 +409,22 @@ public class ContextLoader {
 		// use in any post-processing or initialization that occurs below prior to #refresh
 		ConfigurableEnvironment env = wac.getEnvironment();
 		if (env instanceof ConfigurableWebEnvironment) {
+			/**
+			 * 初始化参数
+			 */
 			((ConfigurableWebEnvironment) env).initPropertySources(sc, null);
 		}
-
+		/**
+		 * 这里回去加载web.xml的配置
+		 * 然后调用配置类的初始化方法
+		 * TODO
+		 */
 		customizeContext(sc, wac);
+		/**
+		 *
+		 * 刷新逻辑走一遍
+		 *
+		 */
 		wac.refresh();
 	}
 
@@ -419,6 +446,10 @@ public class ContextLoader {
 	 * @see ApplicationContextInitializer#initialize(ConfigurableApplicationContext)
 	 */
 	protected void customizeContext(ServletContext sc, ConfigurableWebApplicationContext wac) {
+		/**
+		 * 获取web.xml的配置
+		 * TODO
+		 */
 		List<Class<ApplicationContextInitializer<ConfigurableApplicationContext>>> initializerClasses =
 				determineContextInitializerClasses(sc);
 
@@ -436,6 +467,9 @@ public class ContextLoader {
 		}
 
 		AnnotationAwareOrderComparator.sort(this.contextInitializers);
+		/**
+		 * 调用初始化方法
+		 */
 		for (ApplicationContextInitializer<ConfigurableApplicationContext> initializer : this.contextInitializers) {
 			initializer.initialize(wac);
 		}

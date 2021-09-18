@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 class KanoABFPP implements BeanFactoryPostProcessor {
 
 	KanoABFPP(){
-		log.info("KanoABFPP create");
+//		log.info("KanoABFPP create");
 	}
 
 	@Override
