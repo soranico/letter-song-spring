@@ -201,7 +201,9 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 			this.config.setRegisteredSuffixPatternMatch(useRegisteredSuffixPatternMatch());
 			this.config.setPathMatcher(getPathMatcher());
 		}
-
+		/**
+		 * 建立请求信息 和 方法的映射关系
+		 */
 		super.afterPropertiesSet();
 	}
 
@@ -269,12 +271,20 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	@Nullable
 	protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
 		/**
-		 * 创建
+		 * 创建 url（方法上的） 和方法名 的映射
+		 *
 		 */
 		RequestMappingInfo info = createRequestMappingInfo(method);
 		if (info != null) {
+			/**
+			 * 创建 url（类上） 和 类的 映射
+			 *
+			 */
 			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
 			if (typeInfo != null) {
+				/**
+				 * 合并映射
+				 */
 				info = typeInfo.combine(info);
 			}
 			String prefix = getPathPrefix(handlerType);
@@ -310,13 +320,12 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	private RequestMappingInfo createRequestMappingInfo(AnnotatedElement element) {
 		RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(element, RequestMapping.class);
 		/**
-		 * 一般不是类是方法
 		 * 返回为 null
 		 */
 		RequestCondition<?> condition = (element instanceof Class ?
 				getCustomTypeCondition((Class<?>) element) : getCustomMethodCondition((Method) element));
 		/**
-		 * 创建 url 和方法的映射
+		 * 创建 url 和方法或类的映射
 		 */
 		return (requestMapping != null ? createRequestMappingInfo(requestMapping, condition) : null);
 	}

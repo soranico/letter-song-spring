@@ -46,7 +46,7 @@ public class RequestMappingInfoHandlerMethodMappingNamingStrategy
 		}
 		StringBuilder sb = new StringBuilder();
 		String simpleTypeName = handlerMethod.getBeanType().getSimpleName();
-		for (int i = 0; i < simpleTypeName.length(); i++) {
+		for (int i = 0; i < simpleTypeName.length(); i++) {// KC#doService
 			if (Character.isUpperCase(simpleTypeName.charAt(i))) {
 				sb.append(simpleTypeName.charAt(i));
 			}

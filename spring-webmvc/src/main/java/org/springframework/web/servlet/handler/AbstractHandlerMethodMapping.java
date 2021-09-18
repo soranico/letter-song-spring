@@ -216,6 +216,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	protected void initHandlerMethods() {
 		/**
 		 * 取出所有bean
+		 * 建立请求信息和 bean+方法的映射到
+		 * 每个HandlerMapping 的 mappingRegistry 属性中
+		 * @see mappingRegistry
+		 * @see MappingRegistry
+		 *
 		 */
 		for (String beanName : getCandidateBeanNames()) {
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
@@ -276,6 +281,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @see #getMappingForMethod
 	 */
 	protected void detectHandlerMethods(Object handler) {
+		/**
+		 * 这个拿到的是bean的类型
+		 */
 		Class<?> handlerType = (handler instanceof String ?
 				obtainApplicationContext().getType((String) handler) : handler.getClass());
 
@@ -286,8 +294,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			 */
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
 			/**
-			 * 查找所有满足的方法
+			 * 查找所有满足的方法并建立 映射关系
 			 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#getMappingForMethod(Method, Class)
+			 *
 			 *
 			 */
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
@@ -306,8 +315,17 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			else if (mappingsLogger.isDebugEnabled()) {
 				mappingsLogger.debug(formatMappings(userType, methods));
 			}
+			/**
+			 *
+			 */
 			methods.forEach((method, mapping) -> {
+				/**
+				 * 获取真实调用的方法
+				 */
 				Method invocableMethod = AopUtils.selectInvocableMethod(method, userType);
+				/**
+				 * 注册映射关系
+				 */
 				registerHandlerMethod(handler, invocableMethod, mapping);
 			});
 		}
@@ -338,6 +356,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * under the same mapping
 	 */
 	protected void registerHandlerMethod(Object handler, Method method, T mapping) {
+		/**
+		 * 注册映射关系
+		 */
 		this.mappingRegistry.register(mapping, handler, method);
 	}
 
@@ -348,6 +369,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @return the created HandlerMethod
 	 */
 	protected HandlerMethod createHandlerMethod(Object handler, Method method) {
+		/**
+		 * beanName
+		 */
 		if (handler instanceof String) {
 			return new HandlerMethod((String) handler,
 					obtainApplicationContext().getAutowireCapableBeanFactory(), method);
@@ -641,28 +665,55 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		}
 
 		public void register(T mapping, Object handler, Method method) {
+			/**
+			 * 获取写锁
+			 */
 			this.readWriteLock.writeLock().lock();
 			try {
+				/**
+				 * 创建类型和方法的关系
+				 * 如果handler是beanName那么会将beanFactory也添加到里面
+				 * 用于获取真实class
+				 */
 				HandlerMethod handlerMethod = createHandlerMethod(handler, method);
 				validateMethodMapping(handlerMethod, mapping);
-
+				/**
+				 * 获取方法配置的URL路径
+				 */
 				Set<String> directPaths = AbstractHandlerMethodMapping.this.getDirectPaths(mapping);
+				/**
+				 * 添加URL和mapping的映射
+				 */
 				for (String path : directPaths) {
 					this.pathLookup.add(path, mapping);
 				}
-
+				/**
+				 * beanName的缩写+方法名 kanoController -> KC
+				 * e.g
+				 * KC#doService
+				 *
+				 * 建立和方法的映射
+				 */
 				String name = null;
 				if (getNamingStrategy() != null) {
 					name = getNamingStrategy().getName(handlerMethod, mapping);
 					addMappingName(name, handlerMethod);
 				}
-
+				/**
+				 *
+				 * TODO 跨域
+				 */
 				CorsConfiguration corsConfig = initCorsConfiguration(handler, method, mapping);
 				if (corsConfig != null) {
 					corsConfig.validateAllowCredentials();
 					this.corsLookup.put(handlerMethod, corsConfig);
 				}
-
+				/**
+				 * 注册请求和 方法的映射
+				 * Mapping里面封装的是 请求相关的信息
+				 * 比如 URL 请求类型POST,GET
+				 * 参数条件,head条件等
+				 */
 				this.registry.put(mapping,
 						new MappingRegistration<>(mapping, handlerMethod, directPaths, name, corsConfig != null));
 			}
