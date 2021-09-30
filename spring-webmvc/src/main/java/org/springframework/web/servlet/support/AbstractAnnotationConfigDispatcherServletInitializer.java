@@ -55,9 +55,13 @@ public abstract class AbstractAnnotationConfigDispatcherServletInitializer
 	protected WebApplicationContext createRootApplicationContext() {
 		Class<?>[] configClasses = getRootConfigClasses();
 		if (!ObjectUtils.isEmpty(configClasses)) {
+			/**
+			 * 创建一个spring容器环境
+			 */
 			AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 			/**
-			 * 注册成BD
+			 * 将用户指定的配置类注册为BD
+			 * @see AnnotationConfigWebApplicationContext#register(Class[])
 			 */
 			context.register(configClasses);
 			return context;
