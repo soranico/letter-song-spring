@@ -20,8 +20,10 @@ import org.apache.commons.logging.Log;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.log.LogDelegateFactory;
+import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.server.RequestPath;
 import org.springframework.lang.Nullable;
 import org.springframework.util.AntPathMatcher;
@@ -29,6 +31,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.HttpRequestHandler;
+import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.context.request.WebRequestInterceptor;
 import org.springframework.web.context.request.async.WebAsyncManager;
 import org.springframework.web.context.request.async.WebAsyncUtils;
@@ -37,6 +40,8 @@ import org.springframework.web.cors.*;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.resource.ResourceUrlProvider;
+import org.springframework.web.servlet.resource.ResourceUrlProviderExposingInterceptor;
 import org.springframework.web.util.ServletRequestPathUtils;
 import org.springframework.web.util.UrlPathHelper;
 import org.springframework.web.util.pattern.PathPattern;
@@ -85,9 +90,14 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	private UrlPathHelper urlPathHelper = new UrlPathHelper();
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
-
+	/**
+	 * 原始的拦截器
+	 */
 	private final List<Object> interceptors = new ArrayList<>();
 
+	/**
+	 * 封装后的拦截器
+	 */
 	private final List<HandlerInterceptor> adaptedInterceptors = new ArrayList<>();
 
 	@Nullable
@@ -369,7 +379,26 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 */
 	@Override
 	protected void initApplicationContext() throws BeansException {
+		/**
+		 * 在创建 HandlerMapping 的bean时候 会回调 ApplicationAware接口
+		 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#requestMappingHandlerMapping(ContentNegotiationManager, FormattingConversionService, ResourceUrlProvider)
+		 * 其中调用 setInceptor完成钩子方法回调
+		 * @see AbstractHandlerMapping#setInterceptors(java.lang.Object...)
+		 *
+		 * 默认添加了 两个
+		 * @see ConversionServiceExposingInterceptor
+		 * @see ResourceUrlProviderExposingInterceptor
+		 *
+		 * 因为实现了 ApplicationObjectSupport 最终实现了 ApplicationAware
+		 * @see org.springframework.context.support.ApplicationObjectSupport#setApplicationContext(ApplicationContext)
+		 * 调用了初始化的方法
+		 *
+		 */
 		extendInterceptors(this.interceptors);
+		/**
+		 * 添加注册到容器中的 继承 MappedInterceptor
+		 * @see MappedInterceptor
+		 */
 		detectMappedInterceptors(this.adaptedInterceptors);
 		initInterceptors();
 	}
@@ -490,6 +519,9 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	public final HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
 		/**
 		 * 获取url 和 方法映射
+		 * 一般请求返回的是 HandlerMethod
+		 * @see org.springframework.web.method.HandlerMethod
+		 * @see AbstractHandlerMapping#getHandlerInternal(HttpServletRequest)
 		 */
 		Object handler = getHandlerInternal(request);
 		if (handler == null) {
@@ -509,6 +541,14 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 			initLookupPath(request);
 		}
 
+		/**
+		 *
+		 * 获取满足当前请求的拦截器链表
+		 * 对于 MappedInterceptor 类型的会判断
+		 * 条件是否满足
+		 * 其他类型的会直接添加到拦截链表中进行执行
+		 *
+		 */
 		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);
 
 		if (logger.isTraceEnabled()) {
@@ -517,7 +557,9 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		else if (logger.isDebugEnabled() && !DispatcherType.ASYNC.equals(request.getDispatcherType())) {
 			logger.debug("Mapped to " + executionChain.getHandler());
 		}
-
+		/**
+		 * 跨域相关的处理
+		 */
 		if (hasCorsConfigurationSource(handler) || CorsUtils.isPreFlightRequest(request)) {
 			CorsConfiguration config = getCorsConfiguration(handler, request);
 			if (getCorsConfigurationSource() != null) {
@@ -601,10 +643,19 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 * @see #getAdaptedInterceptors()
 	 */
 	protected HandlerExecutionChain getHandlerExecutionChain(Object handler, HttpServletRequest request) {
+		/**
+		 * 执行链表
+		 */
 		HandlerExecutionChain chain = (handler instanceof HandlerExecutionChain ?
 				(HandlerExecutionChain) handler : new HandlerExecutionChain(handler));
-
+		/**
+		 * 遍历所有拦截器找到匹配当前请求的
+		 */
 		for (HandlerInterceptor interceptor : this.adaptedInterceptors) {
+			/**
+			 * 如果是 MappedInterceptor 需要 进行匹配判断
+			 * 符合才会加入链表
+			 */
 			if (interceptor instanceof MappedInterceptor) {
 				MappedInterceptor mappedInterceptor = (MappedInterceptor) interceptor;
 				if (mappedInterceptor.matches(request)) {

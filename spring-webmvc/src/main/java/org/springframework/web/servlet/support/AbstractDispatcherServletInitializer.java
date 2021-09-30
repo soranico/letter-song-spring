@@ -57,10 +57,16 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		/**
 		 * 完成spring环境的创建
+		 * @see AbstractContextLoaderInitializer#onStartup(ServletContext)
+		 *
+		 * 使用的是容器启动会回调 Listener的 contextInitialized()
+		 * @see org.springframework.web.context.ContextLoaderListener#contextInitialized(ServletContextEvent)
+		 *
 		 */
 		super.onStartup(servletContext);
 		/**
 		 * 完成mvc环境的创建
+		 * @see AbstractDispatcherServletInitializer#registerDispatcherServlet(ServletContext)
 		 */
 		registerDispatcherServlet(servletContext);
 	}
@@ -102,6 +108,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 
 		/**
 		 * 添加Servlet 到tomcat容器
+		 * 容器在启动完成后会调用 Servlet 的 init()
 		 */
 		ServletRegistration.Dynamic registration = servletContext.addServlet(servletName, dispatcherServlet);
 		if (registration == null) {
@@ -109,7 +116,7 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 					"Check if there is another servlet registered under the same name.");
 		}
 		/**
-		 * 启动就完成servlet的初始化
+		 * 设置启动完成就初始化servlet
 		 * 会调用servlet的init()
 		 * @see HttpServletBean#init()
 		 */
@@ -122,7 +129,6 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 		registration.setAsyncSupported(isAsyncSupported());
 		/**
 		 * 钩子方法添加拦截器
-		 *
 		 */
 		Filter[] filters = getServletFilters();
 		if (!ObjectUtils.isEmpty(filters)) {

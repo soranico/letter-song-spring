@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.handler.AbstractHandlerMethodMapping;
 import org.springframework.web.servlet.handler.MatchableHandlerMapping;
 import org.springframework.web.servlet.handler.RequestMatchResult;
 import org.springframework.web.servlet.mvc.condition.AbstractRequestCondition;
@@ -203,6 +204,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 		}
 		/**
 		 * 建立请求信息 和 方法的映射关系
+		 * @see AbstractHandlerMethodMapping#afterPropertiesSet()
 		 */
 		super.afterPropertiesSet();
 	}
@@ -272,21 +274,24 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
 		/**
 		 * 创建 url（方法上的） 和方法名 的映射
-		 *
+		 * @see RequestMappingHandlerMapping#createRequestMappingInfo(AnnotatedElement) 
 		 */
 		RequestMappingInfo info = createRequestMappingInfo(method);
 		if (info != null) {
 			/**
-			 * 创建 url（类上） 和 类的 映射
-			 *
+			 * 创建 url（类上）和 类的 映射
+			 * 类url+方法url才是请求的url
 			 */
 			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
 			if (typeInfo != null) {
 				/**
-				 * 合并映射
+				 * 合并url
 				 */
 				info = typeInfo.combine(info);
 			}
+			/**
+			 * TODO 一般没有
+			 */
 			String prefix = getPathPrefix(handlerType);
 			if (prefix != null) {
 				info = RequestMappingInfo.paths(prefix).options(this.config).build().combine(info);
@@ -326,6 +331,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 				getCustomTypeCondition((Class<?>) element) : getCustomMethodCondition((Method) element));
 		/**
 		 * 创建 url 和方法或类的映射
+		 * @see RequestMappingHandlerMapping#createRequestMappingInfo(RequestMapping, RequestCondition) 
 		 */
 		return (requestMapping != null ? createRequestMappingInfo(requestMapping, condition) : null);
 	}

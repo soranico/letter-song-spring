@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -300,6 +301,8 @@ public class ContextLoader {
 					}
 					/**
 					 * 刷新spring容器
+					 * 就是调用 refresh()
+					 * @see AbstractApplicationContext#refresh()
 					 */
 					configureAndRefreshWebApplicationContext(cwac, servletContext);
 				}
@@ -421,9 +424,8 @@ public class ContextLoader {
 		 */
 		customizeContext(sc, wac);
 		/**
-		 *
 		 * 刷新逻辑走一遍
-		 *
+		 * @see AbstractApplicationContext#refresh()
 		 */
 		wac.refresh();
 	}

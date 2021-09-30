@@ -16,6 +16,7 @@
 
 package org.springframework.web.context;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -101,7 +102,8 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		/**
-		 * 初始化web上下文
+		 * 刷新spring的上下文
+		 * @see ContextLoader#initWebApplicationContext(ServletContext) 
 		 */
 		initWebApplicationContext(event.getServletContext());
 	}

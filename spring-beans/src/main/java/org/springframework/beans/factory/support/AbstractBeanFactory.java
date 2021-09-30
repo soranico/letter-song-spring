@@ -313,21 +313,46 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 
 				else {
+					/**
+					 * 获取 scope 的名字
+					 */
 					String scopeName = mbd.getScope();
 					if (!StringUtils.hasLength(scopeName)) {
 						throw new IllegalStateException("No scope name defined for bean ´" + beanName + "'");
 					}
+					/**
+					 * 获取处理当前 scope的 处理器
+					 * 这个是调用api进行注册的
+					 * @see AbstractBeanFactory#registerScope(String, Scope)
+					 */
 					Scope scope = this.scopes.get(scopeName);
 					if (scope == null) {
 						throw new IllegalStateException("No Scope registered for scope name '" + scopeName + "'");
 					}
 					try {
+						/**
+						 *
+						 * 从Scope中获取bean
+						 * @see Scope#get(String, ObjectFactory)
+						 * 这个bean是不会放到单例池中的
+						 * @see AbstractBeanFactory#singletonObjects
+						 */
 						Object scopedInstance = scope.get(beanName, () -> {
+							/**
+							 * 先将当前创建的beanName放入ThreadLocal
+							 */
 							beforePrototypeCreation(beanName);
 							try {
+								/**
+								 * 创建bean
+								 * @see AbstractAutowireCapableBeanFactory#createBean(String, RootBeanDefinition, Object[])
+								 */
 								return createBean(beanName, mbd, args);
 							}
 							finally {
+								/**
+								 * 从ThreadLocal中移除当前beanName
+								 */
 								afterPrototypeCreation(beanName);
 							}
 						});
@@ -1125,10 +1150,17 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	@SuppressWarnings("unchecked")
 	protected void beforePrototypeCreation(String beanName) {
+		/**
+		 * 先从ThreadLocal中获取当前线程在创建的原型bean
+		 */
 		Object curVal = this.prototypesCurrentlyInCreation.get();
 		if (curVal == null) {
 			this.prototypesCurrentlyInCreation.set(beanName);
 		}
+		/**
+		 * 将原型bean的beanName加入集合中
+		 * 这个里面存的是不同的beanName
+		 */
 		else if (curVal instanceof String) {
 			Set<String> beanNameSet = new HashSet<>(2);
 			beanNameSet.add((String) curVal);

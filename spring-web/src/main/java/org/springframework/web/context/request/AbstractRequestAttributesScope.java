@@ -40,9 +40,17 @@ public abstract class AbstractRequestAttributesScope implements Scope {
 	@Override
 	public Object get(String name, ObjectFactory<?> objectFactory) {
 		RequestAttributes attributes = RequestContextHolder.currentRequestAttributes();
+		/**
+		 * 从请求中获取bean
+		 * 如果不存在那么会调用创建过程
+		 * @see org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean(String, Class, Object[], boolean) 
+		 */
 		Object scopedObject = attributes.getAttribute(name, getScope());
 		if (scopedObject == null) {
 			scopedObject = objectFactory.getObject();
+			/**
+			 * 设置到请求参数中
+			 */
 			attributes.setAttribute(name, scopedObject, getScope());
 			// Retrieve object again, registering it for implicit session attribute updates.
 			// As a bonus, we also allow for potential decoration at the getAttribute level.

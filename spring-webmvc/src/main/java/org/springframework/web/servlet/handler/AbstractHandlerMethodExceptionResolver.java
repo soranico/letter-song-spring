@@ -16,12 +16,12 @@
 
 package org.springframework.web.servlet.handler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Abstract base class for
@@ -43,11 +43,18 @@ public abstract class AbstractHandlerMethodExceptionResolver extends AbstractHan
 		if (handler == null) {
 			return super.shouldApplyTo(request, null);
 		}
+		/**
+		 * 当前处理器是 HandlerMethod
+		 * 一般的Request的请求会是这个
+		 */
 		else if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			handler = handlerMethod.getBean();
 			return super.shouldApplyTo(request, handler);
 		}
+		/**
+		 *  是否有全局的异常处理器
+		 */
 		else if (hasGlobalExceptionHandlers() && hasHandlerMappings()) {
 			return super.shouldApplyTo(request, handler);
 		}
@@ -72,6 +79,10 @@ public abstract class AbstractHandlerMethodExceptionResolver extends AbstractHan
 			HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex) {
 
 		HandlerMethod handlerMethod = (handler instanceof HandlerMethod ? (HandlerMethod) handler : null);
+		/**
+		 * 调用子类的实现
+		 * @see org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver#doResolveHandlerMethodException(HttpServletRequest, HttpServletResponse, HandlerMethod, Exception) 
+		 */
 		return doResolveHandlerMethodException(request, response, handlerMethod, ex);
 	}
 

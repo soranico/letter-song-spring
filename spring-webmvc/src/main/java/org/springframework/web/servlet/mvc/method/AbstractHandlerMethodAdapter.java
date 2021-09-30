@@ -16,15 +16,15 @@
 
 package org.springframework.web.servlet.mvc.method;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.WebContentGenerator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Abstract base class for {@link HandlerAdapter} implementations that support
@@ -66,6 +66,11 @@ public abstract class AbstractHandlerMethodAdapter extends WebContentGenerator i
 	 */
 	@Override
 	public final boolean supports(Object handler) {
+		/**
+		 * RequestMappingInfoHandlerMapping返回的是封装了 方法和拦截器的 链
+		 * 这个和 Dubbo 的实现差不多
+		 * @see RequestMappingInfoHandlerMapping#getHandler(HttpServletRequest)
+		 */
 		return (handler instanceof HandlerMethod && supportsInternal((HandlerMethod) handler));
 	}
 
@@ -83,7 +88,10 @@ public abstract class AbstractHandlerMethodAdapter extends WebContentGenerator i
 	@Nullable
 	public final ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
+		/**
+		 * 调用具体子类处理实现
+		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#handleInternal(HttpServletRequest, HttpServletResponse, HandlerMethod) 
+		 */
 		return handleInternal(request, response, (HandlerMethod) handler);
 	}
 

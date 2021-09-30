@@ -16,16 +16,15 @@
 
 package org.springframework.web.servlet.handler;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A {@link HandlerExceptionResolver} that delegates to a list of other
@@ -74,7 +73,17 @@ public class HandlerExceptionResolverComposite implements HandlerExceptionResolv
 	@Nullable
 	public ModelAndView resolveException(
 			HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex) {
-
+		/**
+		 *
+		 * 默认添加了这两个处理
+		 *
+		 * @see org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver#resolveException(HttpServletRequest, HttpServletResponse, Object, Exception)
+		 *
+		 *
+		 *
+		 * @see org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver
+		 *
+		 */
 		if (this.resolvers != null) {
 			for (HandlerExceptionResolver handlerExceptionResolver : this.resolvers) {
 				ModelAndView mav = handlerExceptionResolver.resolveException(request, response, handler, ex);

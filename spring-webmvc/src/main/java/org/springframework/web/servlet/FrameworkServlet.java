@@ -929,6 +929,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			throws ServletException, IOException {
 		/**
 		 * 处理请求
+		 * @see FrameworkServlet#processRequest(HttpServletRequest, HttpServletResponse)
 		 */
 		processRequest(request, response);
 	}
@@ -1037,12 +1038,14 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		asyncManager.registerCallableInterceptor(FrameworkServlet.class.getName(), new RequestBindingInterceptor());
 		/**
 		 * 存放当前请求的 request 和 response 到 ThreadLocal
+		 * @see FrameworkServlet#initContextHolders(HttpServletRequest, LocaleContext, RequestAttributes) 
 		 */
 		initContextHolders(request, localeContext, requestAttributes);
 
 		try {
 			/**
 			 * 处理请求
+			 * @see DispatcherServlet#doService(HttpServletRequest, HttpServletResponse) 
 			 */
 			doService(request, response);
 		}

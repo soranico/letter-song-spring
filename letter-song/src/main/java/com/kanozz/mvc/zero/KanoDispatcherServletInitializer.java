@@ -14,6 +14,9 @@ public class KanoDispatcherServletInitializer extends AbstractAnnotationConfigDi
 		};
 	}
 
+	/**
+	 * spring 环境
+	 */
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class[]{
@@ -21,6 +24,9 @@ public class KanoDispatcherServletInitializer extends AbstractAnnotationConfigDi
 		};
 	}
 
+	/**
+	 * mvc 环境
+	 */
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		return new Class[]{

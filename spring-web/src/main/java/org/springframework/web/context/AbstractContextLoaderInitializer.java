@@ -50,6 +50,7 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 		/**
 		 * 注册 ContextLoaderListener
 		 * 用于初始化spring环境
+		 * @see AbstractContextLoaderInitializer#registerContextLoaderListener(ServletContext)
 		 */
 		registerContextLoaderListener(servletContext);
 	}
@@ -77,6 +78,10 @@ public abstract class AbstractContextLoaderInitializer implements WebApplication
 			 */
 			ContextLoaderListener listener = new ContextLoaderListener(rootAppContext);
 			listener.setContextInitializers(getRootApplicationContextInitializers());
+			/**
+			 * 添加Listener到容器中
+			 * 在容器启动完成后会调用Listener的 contextInitialized()
+			 */
 			servletContext.addListener(listener);
 		}
 		else {

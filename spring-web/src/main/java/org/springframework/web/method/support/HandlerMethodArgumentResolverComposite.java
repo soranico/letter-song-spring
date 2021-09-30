@@ -16,16 +16,16 @@
 
 package org.springframework.web.method.support;
 
+import org.springframework.core.MethodParameter;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.request.NativeWebRequest;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.core.MethodParameter;
-import org.springframework.lang.Nullable;
-import org.springframework.web.bind.support.WebDataBinderFactory;
-import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * Resolves method parameters by delegating to a list of registered
@@ -99,6 +99,10 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
+		/**
+		 * 进行判断
+		 * @see HandlerMethodArgumentResolverComposite#getArgumentResolver(org.springframework.core.MethodParameter)
+		 */
 		return getArgumentResolver(parameter) != null;
 	}
 
@@ -112,12 +116,21 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	@Nullable
 	public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
-
+		/**
+		 * 获取参数解析器
+		 */
 		HandlerMethodArgumentResolver resolver = getArgumentResolver(parameter);
 		if (resolver == null) {
 			throw new IllegalArgumentException("Unsupported parameter type [" +
 					parameter.getParameterType().getName() + "]. supportsParameter should be called first.");
 		}
+		/**
+		 * 解析参数
+		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#resolveArgument(MethodParameter, ModelAndViewContainer, NativeWebRequest, WebDataBinderFactory)
+		 *
+		 * 处理参数中的 HttpServletRequest
+		 * @see org.springframework.web.servlet.mvc.method.annotation.ServletRequestMethodArgumentResolver#supportsParameter(org.springframework.core.MethodParameter)
+		 */
 		return resolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
 	}
 
@@ -127,8 +140,18 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	 */
 	@Nullable
 	private HandlerMethodArgumentResolver getArgumentResolver(MethodParameter parameter) {
+		/**
+		 * 先从缓存中获取
+		 */
 		HandlerMethodArgumentResolver result = this.argumentResolverCache.get(parameter);
 		if (result == null) {
+			/**
+			 * 调用所有解析器进行解析
+			 *
+			 * 解析 @RequestBody
+			 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#supportsParameter(MethodParameter)
+			 *
+			 */
 			for (HandlerMethodArgumentResolver resolver : this.argumentResolvers) {
 				if (resolver.supportsParameter(parameter)) {
 					result = resolver;

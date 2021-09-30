@@ -16,13 +16,6 @@
 
 package org.springframework.web.method.annotation;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.core.ExceptionDepthComparator;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -31,6 +24,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.util.ReflectionUtils.MethodFilter;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Discovers {@linkplain ExceptionHandler @ExceptionHandler} methods in a given class,
@@ -73,7 +69,16 @@ public class ExceptionHandlerMethodResolver {
 	 * @param handlerType the type to introspect
 	 */
 	public ExceptionHandlerMethodResolver(Class<?> handlerType) {
+		/**
+		 * 查询被指定注解标记的方法
+		 * @see MethodIntrospector#selectMethods(Class, MethodFilter)
+		 *
+		 */
 		for (Method method : MethodIntrospector.selectMethods(handlerType, EXCEPTION_HANDLER_METHODS)) {
+			/**
+			 * 先找注解匹配的异常，没有再找方法形参
+			 * @see ExceptionHandlerMethodResolver#detectExceptionMappings(Method)
+			 */
 			for (Class<? extends Throwable> exceptionType : detectExceptionMappings(method)) {
 				addExceptionMapping(exceptionType, method);
 			}
@@ -88,8 +93,14 @@ public class ExceptionHandlerMethodResolver {
 	@SuppressWarnings("unchecked")
 	private List<Class<? extends Throwable>> detectExceptionMappings(Method method) {
 		List<Class<? extends Throwable>> result = new ArrayList<>();
+		/**
+		 * 找到适配的异常
+		 */
 		detectAnnotationExceptionMappings(method, result);
 		if (result.isEmpty()) {
+			/**
+			 * 找方法的形参
+			 */
 			for (Class<?> paramType : method.getParameterTypes()) {
 				if (Throwable.class.isAssignableFrom(paramType)) {
 					result.add((Class<? extends Throwable>) paramType);
@@ -109,6 +120,9 @@ public class ExceptionHandlerMethodResolver {
 	}
 
 	private void addExceptionMapping(Class<? extends Throwable> exceptionType, Method method) {
+		/**
+		 * 建立异常类型和方法的映射关系
+		 */
 		Method oldMethod = this.mappedMethods.put(exceptionType, method);
 		if (oldMethod != null && !oldMethod.equals(method)) {
 			throw new IllegalStateException("Ambiguous @ExceptionHandler method mapped for [" +

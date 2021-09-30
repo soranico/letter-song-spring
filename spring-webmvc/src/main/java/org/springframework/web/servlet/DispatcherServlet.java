@@ -38,6 +38,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.ui.context.ThemeSource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Validator;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -46,6 +47,7 @@ import org.springframework.web.context.request.async.WebAsyncUtils;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.ServletRequestPathUtils;
@@ -507,6 +509,9 @@ public class DispatcherServlet extends FrameworkServlet {
 		 * 初始化HandlerAdapter
 		 */
 		initHandlerAdapters(context);
+		/**
+		 * 初始化异常解析
+		 */
 		initHandlerExceptionResolvers(context);
 		initRequestToViewNameTranslator(context);
 		initViewResolvers(context);
@@ -640,7 +645,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	 */
 	private void initHandlerAdapters(ApplicationContext context) {
 		this.handlerAdapters = null;
-
+		/**
+		 * 从容器中取出所有Adapter 方法集合里面
+		 */
 		if (this.detectAllHandlerAdapters) {
 			// Find all HandlerAdapters in the ApplicationContext, including ancestor contexts.
 			Map<String, HandlerAdapter> matchingBeans =
@@ -974,7 +981,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		try {
 			/**
 			 * 真正进行处理
-			 *
+			 * @see DispatcherServlet#doDispatch(HttpServletRequest, HttpServletResponse)
 			 */
 			doDispatch(request, response);
 		}
@@ -1040,7 +1047,9 @@ public class DispatcherServlet extends FrameworkServlet {
 		HttpServletRequest processedRequest = request;
 		HandlerExecutionChain mappedHandler = null;
 		boolean multipartRequestParsed = false;
-
+		/**
+		 * TODO 异步管理器
+		 */
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 
 		try {
@@ -1058,14 +1067,31 @@ public class DispatcherServlet extends FrameworkServlet {
 				/**
 				 * 获取处理请求的Handler
 				 * Handler 是 url 和 方法映射
+				 *
+				 * 封装了 拦截器 和请求最终调用的方法
 				 */
 				mappedHandler = getHandler(processedRequest);
+				/**
+				 *
+				 * TODO 没有找到处理的方法
+				 *
+				 */
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
 				// Determine handler adapter for the current request.
+				/**
+				 *
+				 * HandlerMapping用于建立 url 和方法 的映射
+				 * HandlerAdapter 用于真正调用方法
+				 * 调用一个方法
+				 * 1.需要方法参数封装
+				 * 2.需要返回值解析封装
+				 * Adapter主要完成这些操作
+				 *
+				 */
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.
@@ -1077,19 +1103,35 @@ public class DispatcherServlet extends FrameworkServlet {
 						return;
 					}
 				}
-
+				/**
+				 *
+				 * 调用方法前先去调用拦截器链
+				 * 如果拦截器返回了 false
+				 * 那么不会调用真正的执行方法
+				 * 会调用拦截器的后置拦截方法
+				 */
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
 
 				// Actually invoke the handler.
+				/**
+				 * 调用方法处理并获取视图解析
+				 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#handle(HttpServletRequest, HttpServletResponse, Object)
+				 */
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
 					return;
 				}
-
+				/**
+				 * 如果没有视图并且存在视图
+				 * 那么设置默认视图
+				 */
 				applyDefaultViewName(processedRequest, mv);
+				/**
+				 * 调用拦截器的后置处理方法
+				 */
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
 			}
 			catch (Exception ex) {
@@ -1100,9 +1142,14 @@ public class DispatcherServlet extends FrameworkServlet {
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
+			/**
+			 * 处理调用后的方法
+			 * @see DispatcherServlet#processDispatchResult(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.web.servlet.HandlerExecutionChain, org.springframework.web.servlet.ModelAndView, java.lang.Exception)
+			 */
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
+
 			triggerAfterCompletion(processedRequest, response, mappedHandler, ex);
 		}
 		catch (Throwable err) {
@@ -1146,12 +1193,18 @@ public class DispatcherServlet extends FrameworkServlet {
 			@Nullable Exception exception) throws Exception {
 
 		boolean errorView = false;
-
+		/**
+		 * 调用过程出现了异常
+		 */
 		if (exception != null) {
 			if (exception instanceof ModelAndViewDefiningException) {
 				logger.debug("ModelAndViewDefiningException encountered", exception);
 				mv = ((ModelAndViewDefiningException) exception).getModelAndView();
 			}
+			/**
+			 * 调用定义的异常处理
+			 * @see DispatcherServlet#processHandlerException(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
+			 */
 			else {
 				Object handler = (mappedHandler != null ? mappedHandler.getHandler() : null);
 				mv = processHandlerException(request, response, handler, exception);
@@ -1285,11 +1338,12 @@ public class DispatcherServlet extends FrameworkServlet {
 		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 		 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#requestMappingHandlerMapping(ContentNegotiationManager, FormattingConversionService, ResourceUrlProvider)
 		 *
-		 *
+		 * 获取的是一个封装了执行方法和拦截器的对象
 		 *
 		 */
 		if (this.handlerMappings != null) {
 			for (HandlerMapping mapping : this.handlerMappings) {
+
 				HandlerExecutionChain handler = mapping.getHandler(request);
 				if (handler != null) {
 					return handler;
@@ -1324,6 +1378,17 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @throws ServletException if no HandlerAdapter can be found for the handler. This is a fatal error.
 	 */
 	protected HandlerAdapter getHandlerAdapter(Object handler) throws ServletException {
+		/**
+		 * 初始化的HandlerMapping差不多
+		 * @see WebMvcConfigurationSupport#requestMappingHandlerAdapter(ContentNegotiationManager, FormattingConversionService, Validator)
+		 * 先添加到spring 容器中
+		 * 然后在事件通知时添加到 handlerAdapters(List)中
+		 * @see DispatcherServlet#initHandlerAdapters(ApplicationContext)
+		 *
+		 *
+		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#supports(Object)
+		 *
+		 */
 		if (this.handlerAdapters != null) {
 			for (HandlerAdapter adapter : this.handlerAdapters) {
 				if (adapter.supports(handler)) {
@@ -1354,8 +1419,30 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// Check registered HandlerExceptionResolvers...
 		ModelAndView exMv = null;
+		/**
+		 *
+		 * 默认注册的bean
+		 *
+		 * @see WebMvcConfigurationSupport#handlerExceptionResolver(ContentNegotiationManager)
+		 *
+		 *
+		 *
+		 * 在事件回调中会取出容器里的所有实现 HandlerExceptionResolver 接口的 bean
+		 * @see DispatcherServlet#initHandlerExceptionResolvers(ApplicationContext)
+		 *
+		 *
+		 */
 		if (this.handlerExceptionResolvers != null) {
+			/**
+			 *
+			 * 一般会有个默认的
+			 * @see org.springframework.web.servlet.handler.HandlerExceptionResolverComposite#resolveException(HttpServletRequest, HttpServletResponse, Object, Exception)
+			 *
+			 */
 			for (HandlerExceptionResolver resolver : this.handlerExceptionResolvers) {
+				/**
+				 * 调用具体的异常处理
+				 */
 				exMv = resolver.resolveException(request, response, handler, ex);
 				if (exMv != null) {
 					break;

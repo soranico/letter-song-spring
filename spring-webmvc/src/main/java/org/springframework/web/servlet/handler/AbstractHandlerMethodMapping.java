@@ -202,7 +202,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		/**
 		 *
 		 * 初始化url和method 映射
-		 *
+		 * @see AbstractHandlerMethodMapping#initHandlerMethods()
 		 */
 		initHandlerMethods();
 	}
@@ -220,9 +220,12 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		 * 每个HandlerMapping 的 mappingRegistry 属性中
 		 * @see mappingRegistry
 		 * @see MappingRegistry
-		 *
 		 */
 		for (String beanName : getCandidateBeanNames()) {
+			/**
+			 * 不是scope
+			 * @see AbstractHandlerMethodMapping#processCandidateBean(String)
+			 */
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
 				processCandidateBean(beanName);
 			}
@@ -266,9 +269,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		}
 		/**
 		 * 是否支持当前解析
-		 * 
-		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#isHandler(Class) 
-		 * 
+		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#isHandler(Class)
 		 */
 		if (beanType != null && isHandler(beanType)) {
 			detectHandlerMethods(beanName);
@@ -290,13 +291,12 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		if (handlerType != null) {
 			/**
 			 * 获取真实实现类
-			 * 
+			 * 因为当前类可能是个被代理的类
 			 */
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
 			/**
 			 * 查找所有满足的方法并建立 映射关系
 			 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#getMappingForMethod(Method, Class)
-			 *
 			 *
 			 */
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
@@ -321,10 +321,15 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			methods.forEach((method, mapping) -> {
 				/**
 				 * 获取真实调用的方法
+				 * 这个工具类获取到目标类的方法
+				 * 因为有些时候代理类的方法是无法获取到需要的信息的
+				 * e.g
+				 * 获取方法的注解,如果基于代理的方法是没有办法获取到注解的
 				 */
 				Method invocableMethod = AopUtils.selectInvocableMethod(method, userType);
 				/**
 				 * 注册映射关系
+				 * @see AbstractHandlerMethodMapping#registerHandlerMethod(Object, Method, Object) 
 				 */
 				registerHandlerMethod(handler, invocableMethod, mapping);
 			});
@@ -358,6 +363,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	protected void registerHandlerMethod(Object handler, Method method, T mapping) {
 		/**
 		 * 注册映射关系
+		 * @see MappingRegistry#register(Object, Object, Method) 
 		 */
 		this.mappingRegistry.register(mapping, handler, method);
 	}
@@ -409,6 +415,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
 		/**
 		 * 获取请求路径
+		 * @see AbstractHandlerMethodMapping#initLookupPath(HttpServletRequest) 
 		 */
 		String lookupPath = initLookupPath(request);
 		/**
@@ -416,7 +423,21 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		 */
 		this.mappingRegistry.acquireReadLock();
 		try {
+			/**
+			 * 获取处理的方法
+			 * @see AbstractHandlerMethodMapping#lookupHandlerMethod(String, HttpServletRequest) 
+			 */
 			HandlerMethod handlerMethod = lookupHandlerMethod(lookupPath, request);
+			/**
+			 * 创建封装bean的路径
+			 * 需要从bean工厂中获取bean
+			 * 如果bean的Scope存在话，比如request
+			 * @see org.springframework.web.context.WebApplicationContext#SCOPE_REQUEST
+			 * 那么需要从对于的Scope处理器中获取 bean
+			 * 因此需要传入beanName
+			 *
+			 * @see HandlerMethod#createWithResolvedBean()
+			 */
 			return (handlerMethod != null ? handlerMethod.createWithResolvedBean() : null);
 		}
 		finally {
@@ -436,13 +457,22 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Nullable
 	protected HandlerMethod lookupHandlerMethod(String lookupPath, HttpServletRequest request) throws Exception {
 		List<Match> matches = new ArrayList<>();
+		/**
+		 * 从缓存中获取路径匹配的路径
+		 */
 		List<T> directPathMatches = this.mappingRegistry.getMappingsByDirectPath(lookupPath);
+		/**
+		 * 找到完全匹配的路径
+		 */
 		if (directPathMatches != null) {
 			addMatchingMappings(directPathMatches, matches, request);
 		}
 		if (matches.isEmpty()) {
 			addMatchingMappings(this.mappingRegistry.getRegistrations().keySet(), matches, request);
 		}
+		/**
+		 * 获取最合适的匹配
+		 */
 		if (!matches.isEmpty()) {
 			Match bestMatch = matches.get(0);
 			if (matches.size() > 1) {

@@ -16,19 +16,17 @@
 
 package org.springframework.web.servlet.handler;
 
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * Abstract base class for {@link HandlerExceptionResolver} implementations.
@@ -135,9 +133,21 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	@Nullable
 	public ModelAndView resolveException(
 			HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex) {
-
+		/**
+		 * 当前处理器是否适配当前请求
+		 * @see AbstractHandlerExceptionResolver#shouldApplyTo(HttpServletRequest, Object) 
+		 * 
+		 * @see org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver#shouldApplyTo(HttpServletRequest, Object) 
+		 */
 		if (shouldApplyTo(request, handler)) {
 			prepareResponse(ex, response);
+			/**
+			 * 调用具体的异常处理逻辑
+			 * @see org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver#doResolveException(HttpServletRequest, HttpServletResponse, Object, Exception) 
+			 * 
+			 * @see org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver#doResolveException(HttpServletRequest, HttpServletResponse, Object, Exception)
+			 * 
+			 */
 			ModelAndView result = doResolveException(request, response, handler, ex);
 			if (result != null) {
 				// Print debug message when warn logger is not enabled.
@@ -169,6 +179,9 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	 */
 	protected boolean shouldApplyTo(HttpServletRequest request, @Nullable Object handler) {
 		if (handler != null) {
+			/**
+			 * handler 一般是 bean?
+			 */
 			if (this.mappedHandlers != null && this.mappedHandlers.contains(handler)) {
 				return true;
 			}

@@ -16,18 +16,6 @@
 
 package org.springframework.web.servlet.mvc.method.annotation;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -49,16 +37,19 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.ExceptionHandlerMethodResolver;
 import org.springframework.web.method.annotation.MapMethodProcessor;
 import org.springframework.web.method.annotation.ModelMethodProcessor;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodArgumentResolverComposite;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite;
-import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.method.support.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.handler.AbstractHandlerMethodExceptionResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * An {@link AbstractHandlerMethodExceptionResolver} that resolves exceptions
@@ -265,6 +256,14 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 	@Override
 	public void afterPropertiesSet() {
 		// Do this first, it may add ResponseBodyAdvice beans
+		/**
+		 *
+		 * 初始化全局的异常处理
+		 * 被 @ControllerAdvice 标记的
+		 * @see ControllerAdvice
+		 * 并且有 @ExceptionHandler
+		 *
+		 */
 		initExceptionHandlerAdviceCache();
 
 		if (this.argumentResolvers == null) {
@@ -281,14 +280,26 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 		if (getApplicationContext() == null) {
 			return;
 		}
-
+		/**
+		 * 查询容器中所有被 @ControllerAdvice 标记的bean
+		 * @see ControllerAdvice
+		 */
 		List<ControllerAdviceBean> adviceBeans = ControllerAdviceBean.findAnnotatedBeans(getApplicationContext());
 		for (ControllerAdviceBean adviceBean : adviceBeans) {
 			Class<?> beanType = adviceBean.getBeanType();
 			if (beanType == null) {
 				throw new IllegalStateException("Unresolvable type for ControllerAdviceBean: " + adviceBean);
 			}
+			/**
+			 * 查询当前bean是否有 @ExceptionHandler 标记的方法
+			 * 创建对象的时候就会建立映射关系
+			 * @see ExceptionHandlerMethodResolver#ExceptionHandlerMethodResolver(Class)
+			 * @see ExceptionHandlerMethodResolver#hasExceptionMappings()
+			 */
 			ExceptionHandlerMethodResolver resolver = new ExceptionHandlerMethodResolver(beanType);
+			/**
+			 * 存在异常处理则缓存处理
+			 */
 			if (resolver.hasExceptionMappings()) {
 				this.exceptionHandlerAdviceCache.put(adviceBean, resolver);
 			}
@@ -394,7 +405,9 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 	@Nullable
 	protected ModelAndView doResolveHandlerMethodException(HttpServletRequest request,
 			HttpServletResponse response, @Nullable HandlerMethod handlerMethod, Exception exception) {
-
+		/**
+		 * 获取处理的方法
+		 */
 		ServletInvocableHandlerMethod exceptionHandlerMethod = getExceptionHandlerMethod(handlerMethod, exception);
 		if (exceptionHandlerMethod == null) {
 			return null;
@@ -417,14 +430,25 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 			}
 			// Expose causes as provided arguments as well
 			Throwable exToExpose = exception;
+			/**
+			 * 找到所有的异常信息
+			 */
 			while (exToExpose != null) {
 				exceptions.add(exToExpose);
 				Throwable cause = exToExpose.getCause();
 				exToExpose = (cause != exToExpose ? cause : null);
 			}
+			/**
+			 * 封装参数
+			 * 最后一个参数为Controller中发生异常的方法
+			 */
 			Object[] arguments = new Object[exceptions.size() + 1];
 			exceptions.toArray(arguments);  // efficient arraycopy call in ArrayList
 			arguments[arguments.length - 1] = handlerMethod;
+			/**
+			 * 调用具体的处理方法
+			 * @see ServletInvocableHandlerMethod#invokeAndHandle(ServletWebRequest, ModelAndViewContainer, Object...)
+			 */
 			exceptionHandlerMethod.invokeAndHandle(webRequest, mavContainer, arguments);
 		}
 		catch (Throwable invocationEx) {
@@ -436,10 +460,15 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 			// Continue with default processing of the original exception...
 			return null;
 		}
-
+		/**
+		 * 异常处理没有返回视图
+		 */
 		if (mavContainer.isRequestHandled()) {
 			return new ModelAndView();
 		}
+		/**
+		 * 解析异常处理返回的视图
+		 */
 		else {
 			ModelMap model = mavContainer.getModel();
 			HttpStatus status = mavContainer.getStatus();
@@ -471,27 +500,46 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 			@Nullable HandlerMethod handlerMethod, Exception exception) {
 
 		Class<?> handlerType = null;
-
+		/**
+		 * 先从当前bean 即Controller里面找异常处理
+		 */
 		if (handlerMethod != null) {
 			// Local exception handler methods on the controller class itself.
 			// To be invoked through the proxy, even in case of an interface-based proxy.
 			handlerType = handlerMethod.getBeanType();
+			/**
+			 * 从缓存中找到这个bean对应的异常处理
+			 *
+			 */
 			ExceptionHandlerMethodResolver resolver = this.exceptionHandlerCache.get(handlerType);
 			if (resolver == null) {
+				/**
+				 * 查看当前bean是否有处理异常的方法
+				 */
 				resolver = new ExceptionHandlerMethodResolver(handlerType);
 				this.exceptionHandlerCache.put(handlerType, resolver);
 			}
+			/**
+			 * 找到异常对应的方法
+			 */
 			Method method = resolver.resolveMethod(exception);
 			if (method != null) {
 				return new ServletInvocableHandlerMethod(handlerMethod.getBean(), method);
 			}
 			// For advice applicability check below (involving base packages, assignable types
 			// and annotation presence), use target class instead of interface-based proxy.
+			/**
+			 * 需要获取真实类
+			 */
 			if (Proxy.isProxyClass(handlerType)) {
 				handlerType = AopUtils.getTargetClass(handlerMethod.getBean());
 			}
 		}
-
+		/**
+		 * 从全局的异常处理器中找到匹配的
+		 * 这个缓存是在后置处理方法中创建的
+		 * @see ExceptionHandlerExceptionResolver#afterPropertiesSet()
+		 */
 		for (Map.Entry<ControllerAdviceBean, ExceptionHandlerMethodResolver> entry : this.exceptionHandlerAdviceCache.entrySet()) {
 			ControllerAdviceBean advice = entry.getKey();
 			if (advice.isApplicableToBeanType(handlerType)) {

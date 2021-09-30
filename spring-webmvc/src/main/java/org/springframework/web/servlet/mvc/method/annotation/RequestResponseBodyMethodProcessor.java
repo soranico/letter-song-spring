@@ -16,15 +16,10 @@
 
 package org.springframework.web.servlet.mvc.method.annotation;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.core.Conventions;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -44,6 +39,11 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Resolves method arguments annotated with {@code @RequestBody} and handles return
@@ -128,9 +128,16 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		parameter = parameter.nestedIfOptional();
+		/**
+		 * 从请求体中读取并封装数据
+		 * @see RequestResponseBodyMethodProcessor#readWithMessageConverters(NativeWebRequest, MethodParameter, Type)
+		 */
 		Object arg = readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
-		String name = Conventions.getVariableNameForParameter(parameter);
 
+		String name = Conventions.getVariableNameForParameter(parameter);
+		/**
+		 * TODO binder
+		 */
 		if (binderFactory != null) {
 			WebDataBinder binder = binderFactory.createBinder(webRequest, arg, name);
 			if (arg != null) {
@@ -154,7 +161,12 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 		HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
 		Assert.state(servletRequest != null, "No HttpServletRequest");
 		ServletServerHttpRequest inputMessage = new ServletServerHttpRequest(servletRequest);
-
+		/**
+		 *
+		 * 从请求体中读取数据封装为方法参数
+		 * 会调用请求体读取前和后拦截器
+		 * @see AbstractMessageConverterMethodArgumentResolver#readWithMessageConverters(HttpInputMessage, MethodParameter, Type)
+		 */
 		Object arg = readWithMessageConverters(inputMessage, parameter, paramType);
 		if (arg == null && checkRequired(parameter)) {
 			throw new HttpMessageNotReadableException("Required request body is missing: " +
@@ -172,12 +184,19 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 	public void handleReturnValue(@Nullable Object returnValue, MethodParameter returnType,
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
 			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
-
+		/**
+		 * 设置不需要进行视图渲染
+		 */
 		mavContainer.setRequestHandled(true);
 		ServletServerHttpRequest inputMessage = createInputMessage(webRequest);
 		ServletServerHttpResponse outputMessage = createOutputMessage(webRequest);
 
 		// Try even with null return value. ResponseBodyAdvice could get involved.
+		/**
+		 * 通过响应流进行写出数据
+		 * @see AbstractMessageConverterMethodProcessor#writeWithMessageConverters(Object, MethodParameter, ServletServerHttpRequest, ServletServerHttpResponse)
+		 * 如果是 @ResponseBody 那么会设置不需要进行视图渲染标识
+		 */
 		writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);
 	}
 
