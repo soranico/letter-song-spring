@@ -1074,7 +1074,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				/**
 				 *
 				 * TODO 没有找到处理的方法
-				 *
+				 * @see DispatcherServlet#noHandlerFound(HttpServletRequest, HttpServletResponse) 
 				 */
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
@@ -1090,7 +1090,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				 * 1.需要方法参数封装
 				 * 2.需要返回值解析封装
 				 * Adapter主要完成这些操作
-				 *
+				 * @see DispatcherServlet#getHandlerAdapter(Object) 
 				 */
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 

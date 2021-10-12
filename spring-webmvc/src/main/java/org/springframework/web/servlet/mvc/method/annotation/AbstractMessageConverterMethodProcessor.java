@@ -168,6 +168,8 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 			body = value;
 			/**
 			 *  获取返回参数类型
+			 *  如果返回值为null，那么会通过方法来获取返回类型
+			 *  如果返回值存在，那么直接获取返回值对应的类型
 			 */
 			valueType = getReturnValueType(body, returnType);
 			targetType = GenericTypeResolver.resolveType(getGenericType(returnType), returnType.getContainingClass());
@@ -271,6 +273,9 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		 */
 		if (selectedMediaType != null) {
 			selectedMediaType = selectedMediaType.removeQualityValue();
+			/**
+			 *
+			 */
 			for (HttpMessageConverter<?> converter : this.messageConverters) {
 				GenericHttpMessageConverter genericConverter = (converter instanceof GenericHttpMessageConverter ?
 						(GenericHttpMessageConverter<?>) converter : null);

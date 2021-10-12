@@ -12,7 +12,6 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/kano")
-@ResponseBody
 @SuppressWarnings("all")
 public class KanoController {
 	private static final Logger log = LoggerFactory.getLogger(KanoController.class);
@@ -52,16 +51,23 @@ public class KanoController {
 	}
 
 
-
+	@ResponseBody
 	@PostMapping("/do2")
 	public String doService2(){
 		log.info("httpRequest = {}",httpRequest);
 		return "kano1";
 	}
 
+	@PostMapping("/do3")
+	public void doService3(){
+		log.info("--------");
+	}
+
 	@ExceptionHandler(Exception.class)
 	public void exceptionHandle(){
 		log.error("exception");
 	}
+
+
 
 }

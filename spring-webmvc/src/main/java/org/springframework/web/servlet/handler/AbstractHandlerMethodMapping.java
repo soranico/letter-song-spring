@@ -29,6 +29,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.util.pattern.PathPatternParser;
 
 import javax.servlet.ServletException;
@@ -87,6 +88,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	@Nullable
 	private HandlerMethodMappingNamingStrategy<T> namingStrategy;
 
+	/**
+	 * 回调方法进行URL和方法之间的映射缓存
+	 */
 	private final MappingRegistry mappingRegistry = new MappingRegistry();
 
 
@@ -329,7 +333,8 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				Method invocableMethod = AopUtils.selectInvocableMethod(method, userType);
 				/**
 				 * 注册映射关系
-				 * @see AbstractHandlerMethodMapping#registerHandlerMethod(Object, Method, Object) 
+				 * @see AbstractHandlerMethodMapping#registerHandlerMethod(Object, Method, Object)
+				 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#registerHandlerMethod(Object, Method, RequestMappingInfo)
 				 */
 				registerHandlerMethod(handler, invocableMethod, mapping);
 			});
@@ -661,6 +666,10 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		 */
 		@Nullable
 		public List<T> getMappingsByDirectPath(String urlPath) {
+			/**
+			 * 回调方法建立
+			 * @see MappingRegistry#register(Object, Object, Method) 
+			 */
 			return this.pathLookup.get(urlPath);
 		}
 
@@ -704,11 +713,13 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				 * 创建类型和方法的关系
 				 * 如果handler是beanName那么会将beanFactory也添加到里面
 				 * 用于获取真实class
+				 * @see AbstractHandlerMethodMapping
 				 */
 				HandlerMethod handlerMethod = createHandlerMethod(handler, method);
 				validateMethodMapping(handlerMethod, mapping);
 				/**
 				 * 获取方法配置的URL路径
+				 * @see AbstractHandlerMethodMapping#getDirectPaths(Object)
 				 */
 				Set<String> directPaths = AbstractHandlerMethodMapping.this.getDirectPaths(mapping);
 				/**

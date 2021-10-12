@@ -411,11 +411,16 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	@Override
 	public void registerMapping(RequestMappingInfo mapping, Object handler, Method method) {
 		super.registerMapping(mapping, handler, method);
+
 		updateConsumesCondition(mapping, method);
 	}
 
 	@Override
 	protected void registerHandlerMethod(Object handler, Method method, RequestMappingInfo mapping) {
+		/**
+		 * 调用父类完成注册
+		 * @see AbstractHandlerMethodMapping#registerHandlerMethod(Object, Method, Object) 
+		 */
 		super.registerHandlerMethod(handler, method, mapping);
 		updateConsumesCondition(mapping, method);
 	}

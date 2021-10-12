@@ -9,13 +9,24 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.SourceFilteringListener;
 import org.springframework.context.i18n.LocaleContext;
+import org.springframework.core.MethodParameter;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
+import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.handler.AbstractHandlerMethodMapping;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
@@ -26,6 +37,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.List;
 
 public class TestZeroStart {
 
@@ -197,4 +211,180 @@ public class TestZeroStart {
 		tomcat.start();
 		tomcat.getServer().await();
 	}
+
+	/**
+	 * RequestMappingHandlerMapping
+	 * 是通过 WebMvcConfigurationSupport 的 方法引入的
+	 * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#requestMappingHandlerMapping(ContentNegotiationManager, FormattingConversionService, ResourceUrlProvider)
+	 *
+	 * 用于处理 @Controller 和 @RequestMapping 的
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#isHandler(Class)
+	 *
+	 * 请求URL和方法映射是通过 父类的 后置处理方法来完成映射的
+	 * @see AbstractHandlerMethodMapping#afterPropertiesSet()
+	 * 至于RequestMappingHandlerMapping的后置方法会完成一些配置
+	 * @see RequestMappingHandlerMapping#afterPropertiesSet()
+	 *
+	 * ##### 映射关系建立
+	 * 1.首先从spring容器中取出所有的bean
+	 * @see AbstractHandlerMethodMapping#initHandlerMethods()
+	 *
+	 * 2.如果当前bean是匹配的那么会进行处理
+	 * @see AbstractHandlerMethodMapping#detectHandlerMethods(Object)
+	 *
+	 * 2.1 首先获取真实目标类，因为代理类是不包含注解信息的
+	 *
+	 * 2.2 获取目标类中所有的方法，对每个方法调用 getMappingForMethod() 进行处理
+	 * 此时会获取到 Method - RequestMappingInfo 的映射 Map
+	 * @see RequestMappingHandlerMapping#getMappingForMethod(Method, Class)
+	 * 此时会返回一个 RequestMappingInfo
+	 * @see org.springframework.web.servlet.mvc.method.RequestMappingInfo
+	 * 每个 RequestMappingInfo 对应一个方法并关联了 beanName 和 bean工厂 ，请求适配条件等
+	 *
+	 * 2.3 遍历上述的映射进行注册到 父类的mappingRegistry 实例属性中
+	 * @see AbstractHandlerMethodMapping#registerHandlerMethod(Object, Method, Object)
+	 * @see AbstractHandlerMethodMapping#mappingRegistry
+	 *
+	 * 调用内部类 MappingRegistry的 register()
+	 * @see org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.MappingRegistry#register(Object, Object, Method)
+	 * 首先会获取写锁，将beanName(为了支持Scope所以不能直接用bean) 和 beanFactory 处理的Method 封装为 HandlerMethod
+	 * @see org.springframework.web.method.HandlerMethod
+	 *
+	 * 再获取URL，然后注册每个URL和RequestMappingInfo实例的映射关系到 pathLookup属性
+	 * @see AbstractHandlerMethodMapping.MappingRegistry#pathLookup
+	 *
+	 * 注册 HandlerMethod 和 跨域配置的映射到 corsLookup属性
+	 * @see org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.MappingRegistry#corsLookup
+	 *
+	 * 注册RequestMappingInfo 和 封装了 HandlerMethod的 MappingRegistration实例的关系到 registry(HashMap)属性
+	 * @see org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.MappingRegistration
+	 * @see org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.MappingRegistry#registry
+	 *
+	 * 2.4 TODO 更新条件，调用完父类注册后会执行自己的 更新消费参数 方法
+	 * @see RequestMappingHandlerMapping#registerHandlerMethod(Object, Method, RequestMappingInfo)
+	 * @see RequestMappingHandlerMapping#updateConsumesCondition(RequestMappingInfo, Method)
+	 * 具体就是处理每个方法的参数，如果
+	 *
+	 * ###### 请求处理
+	 * 前面会走servlet逻辑最终调用这个处理请求
+	 * @see org.springframework.web.servlet.DispatcherServlet#doDispatch(HttpServletRequest, HttpServletResponse)
+	 *
+	 * 1.首先会根据请求的URL判断是否被RequestMappingHandlerMapping支持
+	 * @see AbstractHandlerMethodMapping#getHandler(HttpServletRequest)
+	 *
+	 * 1.1 调用 RequestMapping 获取到之前缓存的HandlerMethod
+	 * @see RequestMappingHandlerMapping#getHandlerInternal(HttpServletRequest)
+	 * 最终是从 AbstrctHandlerMethodMapping 中获取
+	 * @see AbstractHandlerMethodMapping#getHandlerInternal(HttpServletRequest)
+	 *
+	 * 1.1.1 首先获取读锁 从缓存中获取URL匹配的 RequestMappingInfo
+	 * @see AbstractHandlerMethodMapping#lookupHandlerMethod(String, HttpServletRequest)
+	 * 最终是从 MappingRegistry 的 pathLookup缓存中获取的
+	 * @see org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.MappingRegistry#getMappingsByDirectPath(String)
+	 *
+	 * 1.1.2 找到匹配的RequestMappingInfo
+	 * 再次进行匹配,这次会进行请求级别的匹配 即判断Condition 是否满足
+	 * @see AbstractHandlerMethodMapping#addMatchingMappings(Collection, List, HttpServletRequest)
+	 * 如果上步找到多个的话会找到最适合的那个，TODO 匹配规则
+	 * 找到最合适的会在Request的属性中设置指定值
+	 * 并且返回处理请求的具体方法 HandlerMethod
+	 *
+	 * 1.2 获取到HandlerMethod后 获取支持当前 HandlerMethod 的 拦截器
+	 * @see AbstractHandlerMethodMapping#getHandlerExecutionChain(Object, HttpServletRequest)
+	 * 并将拦截器和HandlerMethod 封装成 HandlerExectionChain
+	 * @see org.springframework.web.servlet.HandlerExecutionChain
+	 *
+	 * 此时获取到URL对应的方法以及使用的拦截器链
+	 *
+	 * 2. 获取支持当前处理方法的 Adapter ,需要 Adapter处理方法参数后 调用具体的方法并返回值
+	 * @see org.springframework.web.servlet.DispatcherServlet#getHandlerAdapter(Object)
+	 *
+	 * 2.1 判断 RequestMappingHandlerAdapter是否支持处理 这个方法 就是判断当前是不是 HandlerMethod
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#supports(Object)
+	 *
+	 * 3. 调用方法之前调用前置拦截器
+	 * @see org.springframework.web.servlet.HandlerExecutionChain#applyPreHandle(HttpServletRequest, HttpServletResponse)
+	 * 如果前置拦截器返回false,那么会执行拦截器的处理完成方法
+	 * 但不会真正调用方法
+	 * @see org.springframework.web.servlet.HandlerExecutionChain#triggerAfterCompletion(HttpServletRequest, HttpServletResponse, Exception)
+	 *
+	 * 4. 调用真正的方法并且获取返回参数
+	 * @see org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter#handle(HttpServletRequest, HttpServletResponse, Object)
+	 * 具体子类的实现
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#handleInternal(HttpServletRequest, HttpServletResponse, HandlerMethod)
+	 *
+	 * 4.1 反射调用方法获取返回数据
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter#invokeHandlerMethod(HttpServletRequest, HttpServletResponse, HandlerMethod)
+	 * 最终会调用 ServletInvocableHandlerMethod 的 invokeAndHandle()
+	 * @see org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod#invokeAndHandle(ServletWebRequest, ModelAndViewContainer, Object...)
+	 *
+	 * 4.1.1 调用方法获取返回值
+	 * @see org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod#invokeForRequest(NativeWebRequest, ModelAndViewContainer, Object...)
+	 *
+	 * 4.1.1.1 先封装方法调用的参数
+	 * @see org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod#getMethodArgumentValues(NativeWebRequest, ModelAndViewContainer, Object...)
+	 * 对于不同参数调用不同的解析器,此时会将满足的解析器和参数类型进行缓存
+	 * @see org.springframework.web.method.support.HandlerMethodArgumentResolverComposite#supportsParameter(MethodParameter) 
+	 * @see org.springframework.web.method.support.HandlerMethodArgumentResolverComposite#getArgumentResolver(MethodParameter)
+	 * 会调用每个具体解析器是否支持处理这个类型的参数,例如解析 @RequestBody的 RequestResponseBodyMethodProcessor
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#supportsParameter(MethodParameter)
+	 *
+	 * 4.1.1.2 反射调用方法
+	 * @see org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod#doInvoke(Object...)
+	 *
+	 * 4.2 调用方法成功
+	 * 首先会设置需要进行视图渲染,因为此时不知道是否会直接用response输出响应
+	 * mavContainer.setRequestHandled(false);
+	 *
+	 * 4.2.1 调用返回类型解析器综合类
+	 * @see org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite#handleReturnValue(Object, MethodParameter, ModelAndViewContainer, NativeWebRequest)
+	 *
+	 * 4.2.1.1 首先获取处理当前返回类型的解析
+	 * @see org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite#selectHandler(Object, MethodParameter)
+	 *
+	 * 此时会调用每个具体的 HandlerMethodReturnValueHandler 来判断是否支持处理
+	 * @see org.springframework.web.method.support.HandlerMethodReturnValueHandler#supportsReturnType(MethodParameter)
+	 * 例如 RequestResponseBodyMethodProcessor 会判断方法返回参数被 @ResponseBody标记
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#supportsReturnType(MethodParameter)
+	 *
+	 * 4.2.1.2 调用具体的返回类型解析器解析方法返回数据，
+	 * 例如处理 @ResponseBody 的
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#handleReturnValue(Object, MethodParameter, ModelAndViewContainer, NativeWebRequest)
+	 * 设置 mavContainer.setRequestHandled(true) 表示已经处理，不需要进行视图渲染
+	 * 调用对用的消息解析器进行返回数据的输出
+	 * @see AbstractMessageConverterMethodProcessor#writeWithMessageConverters(java.lang.Object, org.springframework.core.MethodParameter, org.springframework.http.server.ServletServerHttpRequest, org.springframework.http.server.ServletServerHttpResponse)
+	 * 如果是 CharSequence 会转为 String,
+	 * 不是 CharSequence,如果返回值不为null，那么用返回值的类型否则用方法的类型
+	 * 最后调用每个 消息转换器 ，找到支持写出返回类型的消息转换器
+	 * @see org.springframework.http.converter.GenericHttpMessageConverter#canWrite(Type, Class, MediaType)
+	 * 在写出消息之前需要调用 @ResponseBodyAdvice 标记的 bean 处理消息
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyAdviceChain#beforeBodyWrite(Object, MethodParameter, MediaType, Class, ServerHttpRequest, ServerHttpResponse)
+	 * 如果处理后的数据不为null 那么会调用具体的消息转换器将消息写出
+	 * 比如默认的 jackson
+	 * @see org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter
+	 *
+	 *
+	 * 对于 ViewNameMethodReturnValueHandler 会进行视图渲染
+	 * @see org.springframework.web.servlet.mvc.method.annotation.ViewNameMethodReturnValueHandler#handleReturnValue(Object, MethodParameter, ModelAndViewContainer, NativeWebRequest)
+	 *
+	 *
+	 *
+	 */
+	@Test
+	public void testRequestMappingHandlerMapping() throws Exception{
+		Tomcat tomcat = new Tomcat();
+		Connector connector = new Connector();
+		connector.setPort(9091);
+		tomcat.setConnector(connector);
+		tomcat.setHostname("127.0.0.1");
+		File baseDir =  TomcatUtil.createTempDir("tomcat");
+		tomcat.setBaseDir(baseDir.getAbsolutePath());
+		File docBase = TomcatUtil.createTempDir("tomcat-docbase");
+		tomcat.addWebapp("",docBase.getAbsolutePath());
+		tomcat.getHost().setAutoDeploy(false);
+		tomcat.start();
+		tomcat.getServer().await();
+	}
+
+
 }

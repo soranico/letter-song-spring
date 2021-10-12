@@ -16,12 +16,6 @@
 
 package org.springframework.web.servlet.mvc.method.annotation;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
@@ -31,6 +25,12 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.method.ControllerAdviceBean;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Invokes {@link RequestBodyAdvice} and {@link ResponseBodyAdvice} where each
@@ -112,7 +112,11 @@ class RequestResponseBodyAdviceChain implements RequestBodyAdvice, ResponseBodyA
 	public Object beforeBodyWrite(@Nullable Object body, MethodParameter returnType, MediaType contentType,
 			Class<? extends HttpMessageConverter<?>> converterType,
 			ServerHttpRequest request, ServerHttpResponse response) {
-
+		/**
+		 * 调用 被 @ResponseBodyAdvice 标记的 bean
+		 * 处理返回数据
+		 * @see RequestResponseBodyAdviceChain#processBody(Object, MethodParameter, MediaType, Class, ServerHttpRequest, ServerHttpResponse)
+		 */
 		return processBody(body, returnType, contentType, converterType, request, response);
 	}
 

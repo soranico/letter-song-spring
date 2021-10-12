@@ -81,6 +81,7 @@ public class HandlerMethodReturnValueHandlerComposite implements HandlerMethodRe
 		/**
 		 * 进行响应体处理
 		 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#handleReturnValue(java.lang.Object, org.springframework.core.MethodParameter, org.springframework.web.method.support.ModelAndViewContainer, org.springframework.web.context.request.NativeWebRequest)
+		 * @see org.springframework.web.servlet.mvc.method.annotation.ViewNameMethodReturnValueHandler#handleReturnValue(Object, MethodParameter, ModelAndViewContainer, NativeWebRequest)
 		 */
 		handler.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
 	}

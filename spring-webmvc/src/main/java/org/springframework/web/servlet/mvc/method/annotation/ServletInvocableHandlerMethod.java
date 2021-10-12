@@ -117,6 +117,7 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 		if (returnValue == null) {
 			/**
 			 * 不需要进行视图跳转
+			 * 这里不知道做啥
 			 */
 			if (isRequestNotModified(webRequest) || getResponseStatus() != null || mavContainer.isRequestHandled()) {
 				disableContentCachingIfNecessary(webRequest);
@@ -129,7 +130,7 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 			return;
 		}
 		/**
-		 * 不需要进行视图渲染
+		 * 设置需要进行视图渲染
 		 */
 		mavContainer.setRequestHandled(false);
 		Assert.state(this.returnValueHandlers != null, "No return value handlers");
