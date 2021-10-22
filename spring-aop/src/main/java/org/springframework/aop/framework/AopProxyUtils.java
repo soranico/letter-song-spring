@@ -16,11 +16,6 @@
 
 package org.springframework.aop.framework;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-
 import org.springframework.aop.SpringProxy;
 import org.springframework.aop.TargetClassAware;
 import org.springframework.aop.TargetSource;
@@ -30,6 +25,11 @@ import org.springframework.core.DecoratingProxy;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
 
 /**
  * Utility methods for AOP proxy factories.
@@ -99,6 +99,9 @@ public abstract class AopProxyUtils {
 	 * @see Advised
 	 */
 	public static Class<?>[] completeProxiedInterfaces(AdvisedSupport advised) {
+		/**
+		 * @see AopProxyUtils#completeProxiedInterfaces(AdvisedSupport, boolean)
+		 */
 		return completeProxiedInterfaces(advised, false);
 	}
 
@@ -130,7 +133,15 @@ public abstract class AopProxyUtils {
 				specifiedInterfaces = advised.getProxiedInterfaces();
 			}
 		}
+		/**
+		 * 添加 SpringProxy 接口
+		 */
 		boolean addSpringProxy = !advised.isInterfaceProxied(SpringProxy.class);
+		/**
+		 * 添加 Advised 接口
+		 * 可以用于获取被代理的bean
+		 * @see Advised
+		 */
 		boolean addAdvised = !advised.isOpaque() && !advised.isInterfaceProxied(Advised.class);
 		boolean addDecoratingProxy = (decoratingProxy && !advised.isInterfaceProxied(DecoratingProxy.class));
 		int nonUserIfcCount = 0;

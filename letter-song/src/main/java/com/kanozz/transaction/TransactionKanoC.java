@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
-class TransactionKanoC {
+public class TransactionKanoC {
 	private static final Logger log = LoggerFactory.getLogger(TransactionKanoC.class);
 	@Autowired
 	private TransactionKanoB transactionKanoB;

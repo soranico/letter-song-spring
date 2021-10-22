@@ -16,13 +16,13 @@
 
 package org.springframework.aop.aspectj;
 
-import java.util.List;
-
 import org.springframework.aop.Advisor;
 import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.interceptor.ExposeInvocationInterceptor;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * Utility methods for working with AspectJ proxies.
@@ -51,11 +51,32 @@ public abstract class AspectJProxyUtils {
 			for (Advisor advisor : advisors) {
 				// Be careful not to get the Advice without a guard, as this might eagerly
 				// instantiate a non-singleton AspectJ aspect...
+				/**
+				 *
+				 * 如果存在AspectJ的拦截
+				 * 对于注解 @Aspect 而言被封装为 InstantiationModelAwarePointcutAdvisorImpl
+				 * @see org.springframework.aop.aspectj.annotation.InstantiationModelAwarePointcutAdvisorImpl
+				 *
+				 * TODO
+				 * @see AbstractAspectJAdvice
+				 * 或者
+				 * @see PointcutAdvisor
+				 * && 切点是
+				 * @see AspectJExpressionPointcut
+				 *
+				 */
 				if (isAspectJAdvice(advisor)) {
 					foundAspectJAdvice = true;
 					break;
 				}
 			}
+			/**
+			 *
+			 * 找到则添加默认的
+			 * 到第一个拦截器
+			 * @see ExposeInvocationInterceptor
+			 * 也就是第一个会调用这个
+			 */
 			if (foundAspectJAdvice && !advisors.contains(ExposeInvocationInterceptor.ADVISOR)) {
 				advisors.add(0, ExposeInvocationInterceptor.ADVISOR);
 				return true;

@@ -16,11 +16,11 @@
 
 package org.springframework.aop.target;
 
-import java.io.Serializable;
-
 import org.springframework.aop.TargetSource;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+
+import java.io.Serializable;
 
 /**
  * Implementation of the {@link org.springframework.aop.TargetSource} interface
@@ -42,6 +42,10 @@ public class SingletonTargetSource implements TargetSource, Serializable {
 
 
 	/** Target cached and invoked using reflection. */
+	/**
+	 * 被代理的对象
+	 * 原始 bean
+	 */
 	private final Object target;
 
 

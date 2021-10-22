@@ -16,15 +16,16 @@
 
 package org.springframework.aop.framework.adapter;
 
-import java.io.Serializable;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-
 import org.springframework.aop.BeforeAdvice;
 import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.aop.framework.ReflectiveMethodInvocation;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
 
 /**
  * Interceptor to wrap a {@link MethodBeforeAdvice}.
@@ -54,7 +55,15 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor, BeforeA
 	@Override
 	@Nullable
 	public Object invoke(MethodInvocation mi) throws Throwable {
+		/**
+		 * 对于 @Before 调用
+		 * @see org.springframework.aop.aspectj.AspectJMethodBeforeAdvice#before(Method, Object[], Object)
+		 */
 		this.advice.before(mi.getMethod(), mi.getArguments(), mi.getThis());
+		/**
+		 * 传递调用
+		 * @see ReflectiveMethodInvocation#proceed()
+		 */
 		return mi.proceed();
 	}
 

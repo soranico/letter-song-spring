@@ -16,6 +16,14 @@
 
 package org.springframework.aop.support;
 
+import org.springframework.aop.*;
+import org.springframework.core.BridgeMethodResolver;
+import org.springframework.core.MethodIntrospector;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ReflectionUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -24,22 +32,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.springframework.aop.Advisor;
-import org.springframework.aop.AopInvocationException;
-import org.springframework.aop.IntroductionAdvisor;
-import org.springframework.aop.IntroductionAwareMethodMatcher;
-import org.springframework.aop.MethodMatcher;
-import org.springframework.aop.Pointcut;
-import org.springframework.aop.PointcutAdvisor;
-import org.springframework.aop.SpringProxy;
-import org.springframework.aop.TargetClassAware;
-import org.springframework.core.BridgeMethodResolver;
-import org.springframework.core.MethodIntrospector;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ReflectionUtils;
 
 /**
  * Utility methods for AOP support code.
@@ -223,10 +215,21 @@ public abstract class AopUtils {
 	 */
 	public static boolean canApply(Pointcut pc, Class<?> targetClass, boolean hasIntroductions) {
 		Assert.notNull(pc, "Pointcut must not be null");
+		/**
+		 * 被 @Aspect 标记的封装成这个
+		 * @see org.springframework.aop.aspectj.AspectJExpressionPointcut#matches(Class)
+		 * 先进行类级别的匹配
+		 */
 		if (!pc.getClassFilter().matches(targetClass)) {
 			return false;
 		}
-
+		/**
+		 * 对于 @Aspect
+		 * 返回的是 AspectJExpressionPointcut
+		 * @see org.springframework.aop.aspectj.AspectJExpressionPointcut
+		 * 里面封装了 PointcutExpressionImpl 用于解析表达式 判断方法满足性
+		 * @see org.aspectj.weaver.internal.tools.PointcutExpressionImpl
+		 */
 		MethodMatcher methodMatcher = pc.getMethodMatcher();
 		if (methodMatcher == MethodMatcher.TRUE) {
 			// No need to iterate the methods if we're matching any method anyway...
@@ -247,6 +250,12 @@ public abstract class AopUtils {
 		for (Class<?> clazz : classes) {
 			Method[] methods = ReflectionUtils.getAllDeclaredMethods(clazz);
 			for (Method method : methods) {
+				/**
+				 * 对于 @Aspect 会走
+				 * @see IntroductionAwareMethodMatcher#matches(Method, Class, Object...)
+				 * 实现类为
+				 * @see org.springframework.aop.aspectj.AspectJExpressionPointcut#matches(Method, Class, boolean)
+				 */
 				if (introductionAwareMethodMatcher != null ?
 						introductionAwareMethodMatcher.matches(method, targetClass, hasIntroductions) :
 						methodMatcher.matches(method, targetClass)) {
@@ -284,8 +293,15 @@ public abstract class AopUtils {
 		if (advisor instanceof IntroductionAdvisor) {
 			return ((IntroductionAdvisor) advisor).getClassFilter().matches(targetClass);
 		}
+		/**
+		 * 被 @Aspect 标记的
+		 * @see org.springframework.aop.aspectj.annotation.InstantiationModelAwarePointcutAdvisorImpl
+		 */
 		else if (advisor instanceof PointcutAdvisor) {
 			PointcutAdvisor pca = (PointcutAdvisor) advisor;
+			/**
+			 * @see AopUtils#canApply(Pointcut, Class, boolean)
+			 */
 			return canApply(pca.getPointcut(), targetClass, hasIntroductions);
 		}
 		else {
@@ -313,11 +329,17 @@ public abstract class AopUtils {
 			}
 		}
 		boolean hasIntroductions = !eligibleAdvisors.isEmpty();
+		/**
+		 * 处理 @Aspect 标记的引入的
+		 */
 		for (Advisor candidate : candidateAdvisors) {
 			if (candidate instanceof IntroductionAdvisor) {
 				// already processed
 				continue;
 			}
+			/**
+			 * @see AopUtils#canApply(Pointcut, Class, boolean)
+			 */
 			if (canApply(candidate, clazz, hasIntroductions)) {
 				eligibleAdvisors.add(candidate);
 			}
