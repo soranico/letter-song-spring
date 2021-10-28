@@ -16,21 +16,15 @@
 
 package org.springframework.transaction.support;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.core.OrderComparator;
 import org.springframework.lang.Nullable;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.util.Assert;
+
+import java.util.*;
 
 /**
  * Central delegate that manages resources and transaction synchronizations per thread.
@@ -136,7 +130,15 @@ public abstract class TransactionSynchronizationManager {
 	 */
 	@Nullable
 	public static Object getResource(Object key) {
+		/**
+		 * 如果被代理获取真实对象
+		 * @see TransactionSynchronizationUtils#unwrapResourceIfNecessary(Object)
+		 */
 		Object actualKey = TransactionSynchronizationUtils.unwrapResourceIfNecessary(key);
+		/**
+		 * 首先从线程上下文中获取，不存在则直接返回 null
+		 * @see TransactionSynchronizationManager#doGetResource(Object)
+		 */
 		Object value = doGetResource(actualKey);
 		if (value != null && logger.isTraceEnabled()) {
 			logger.trace("Retrieved value [" + value + "] for key [" + actualKey + "] bound to thread [" +
@@ -150,6 +152,11 @@ public abstract class TransactionSynchronizationManager {
 	 */
 	@Nullable
 	private static Object doGetResource(Object actualKey) {
+		/**
+		 * 线程上下文中获取
+		 * 这个绑定是在这个方法中完成的
+		 * @see AbstractPlatformTransactionManager#doBegin(Object, TransactionDefinition) 
+		 */
 		Map<Object, Object> map = resources.get();
 		if (map == null) {
 			return null;

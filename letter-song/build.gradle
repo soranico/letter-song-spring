@@ -30,6 +30,7 @@ dependencies {
     compile('com.alibaba:druid:1.2.6')
     compile('org.apache.tomcat.embed:tomcat-embed-core:9.0.43')
     compile('com.fasterxml.jackson.core:jackson-databind:2.12.3')
+    compile('mysql:mysql-connector-java:8.0.26')
 
 }
 

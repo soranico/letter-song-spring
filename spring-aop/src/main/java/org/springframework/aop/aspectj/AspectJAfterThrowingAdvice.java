@@ -16,14 +16,14 @@
 
 package org.springframework.aop.aspectj;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-
+import org.aspectj.weaver.tools.JoinPointMatch;
 import org.springframework.aop.AfterAdvice;
 import org.springframework.lang.Nullable;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
 
 /**
  * Spring AOP advice wrapping an AspectJ after-throwing advice method.
@@ -64,6 +64,11 @@ public class AspectJAfterThrowingAdvice extends AbstractAspectJAdvice
 			return mi.proceed();
 		}
 		catch (Throwable ex) {
+			/**
+			 * 判断异常类型是否匹配
+			 * 调用抛出异常方法
+			 * @see AbstractAspectJAdvice#invokeAdviceMethod(JoinPointMatch, Object, Throwable)
+			 */
 			if (shouldInvokeOnThrowing(ex)) {
 				invokeAdviceMethod(getJoinPointMatch(), null, ex);
 			}

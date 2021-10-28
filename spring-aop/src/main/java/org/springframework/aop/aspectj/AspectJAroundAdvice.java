@@ -16,16 +16,16 @@
 
 package org.springframework.aop.aspectj;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.weaver.tools.JoinPointMatch;
-
 import org.springframework.aop.ProxyMethodInvocation;
+import org.springframework.aop.framework.ReflectiveMethodInvocation;
 import org.springframework.lang.Nullable;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
 
 /**
  * Spring AOP around advice (MethodInterceptor) that wraps
@@ -67,6 +67,14 @@ public class AspectJAroundAdvice extends AbstractAspectJAdvice implements Method
 			throw new IllegalStateException("MethodInvocation is not a Spring ProxyMethodInvocation: " + mi);
 		}
 		ProxyMethodInvocation pmi = (ProxyMethodInvocation) mi;
+		/**
+		 * 此时传入的 ReflectiveMethodInvocation
+		 * @see org.springframework.aop.framework.ReflectiveMethodInvocation
+		 * 当在 @Around 的方法里面调用 proceed() 时
+		 * 实际调用的是
+		 * @see ReflectiveMethodInvocation#proceed()
+		 * 因此必须手动触发方法的调用
+		 */
 		ProceedingJoinPoint pjp = lazyGetProceedingJoinPoint(pmi);
 		JoinPointMatch jpm = getJoinPointMatch(pmi);
 		return invokeAdviceMethod(pjp, jpm, null, null);

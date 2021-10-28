@@ -137,6 +137,14 @@ public abstract class AbstractTransactionStatus implements TransactionStatus {
 	 * if the underlying transaction does not support savepoints
 	 */
 	public void createAndHoldSavepoint() throws TransactionException {
+		/**
+		 * 创建保存点
+		 * @see DefaultTransactionStatus#getSavepointManager()
+		 * 返回的一般是
+		 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager.DataSourceTransactionObject
+		 * 最终调用父类
+		 * @see org.springframework.jdbc.datasource.JdbcTransactionObjectSupport#createSavepoint()
+		 */
 		setSavepoint(getSavepointManager().createSavepoint());
 	}
 
@@ -150,7 +158,15 @@ public abstract class AbstractTransactionStatus implements TransactionStatus {
 			throw new TransactionUsageException(
 					"Cannot roll back to savepoint - no savepoint associated with current transaction");
 		}
+		/**
+		 * 回滚到保存点
+		 * @see org.springframework.jdbc.datasource.JdbcTransactionObjectSupport#rollbackToSavepoint(java.lang.Object)
+		 */
 		getSavepointManager().rollbackToSavepoint(savepoint);
+		/**
+		 * 释放保存点
+		 * @see org.springframework.jdbc.datasource.JdbcTransactionObjectSupport#releaseSavepoint(java.lang.Object)
+		 */
 		getSavepointManager().releaseSavepoint(savepoint);
 		setSavepoint(null);
 	}

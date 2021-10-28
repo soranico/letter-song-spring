@@ -16,10 +16,10 @@
 
 package org.springframework.transaction.interceptor;
 
-import java.io.Serializable;
-
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.io.Serializable;
 
 /**
  * Rule determining whether or not a given exception (and any subclasses)
@@ -66,6 +66,9 @@ public class RollbackRuleAttribute implements Serializable{
 			throw new IllegalArgumentException(
 					"Cannot construct rollback rule from [" + clazz.getName() + "]: it's not a Throwable");
 		}
+		/**
+		 * 保存异常名
+		 */
 		this.exceptionName = clazz.getName();
 	}
 
@@ -112,11 +115,18 @@ public class RollbackRuleAttribute implements Serializable{
 
 
 	private int getDepth(Class<?> exceptionClass, int depth) {
+		/**
+		 * 匹配类全限定名
+		 */
 		if (exceptionClass.getName().contains(this.exceptionName)) {
 			// Found it!
 			return depth;
 		}
 		// If we've gone as far as we can go and haven't found it...
+		/**
+		 * 最顶层也没有匹配上
+		 * 说明当前异常不匹配
+		 */
 		if (exceptionClass == Throwable.class) {
 			return -1;
 		}

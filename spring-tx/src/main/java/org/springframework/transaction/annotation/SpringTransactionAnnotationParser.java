@@ -16,12 +16,6 @@
 
 package org.springframework.transaction.annotation;
 
-import java.io.Serializable;
-import java.lang.reflect.AnnotatedElement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -32,6 +26,12 @@ import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute
 import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.io.Serializable;
+import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Strategy implementation for parsing Spring's {@link Transactional} annotation.
@@ -54,6 +54,10 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		AnnotationAttributes attributes = AnnotatedElementUtils.findMergedAnnotationAttributes(
 				element, Transactional.class, false, false);
 		if (attributes != null) {
+			/**
+			 * 解析注解的值
+			 * @see SpringTransactionAnnotationParser#parseTransactionAnnotation(AnnotationAttributes)
+			 */
 			return parseTransactionAnnotation(attributes);
 		}
 		else {
@@ -67,9 +71,14 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 
 	protected TransactionAttribute parseTransactionAnnotation(AnnotationAttributes attributes) {
 		RuleBasedTransactionAttribute rbta = new RuleBasedTransactionAttribute();
-
+		/**
+		 * 传播属性
+		 */
 		Propagation propagation = attributes.getEnum("propagation");
 		rbta.setPropagationBehavior(propagation.value());
+		/**
+		 * 隔离级别
+		 */
 		Isolation isolation = attributes.getEnum("isolation");
 		rbta.setIsolationLevel(isolation.value());
 
@@ -78,18 +87,28 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		Assert.isTrue(!StringUtils.hasText(timeoutString) || rbta.getTimeout() < 0,
 				"Specify 'timeout' or 'timeoutString', not both");
 		rbta.setTimeoutString(timeoutString);
-
+		/**
+		 * 只读
+		 */
 		rbta.setReadOnly(attributes.getBoolean("readOnly"));
 		rbta.setQualifier(attributes.getString("value"));
 		rbta.setLabels(Arrays.asList(attributes.getStringArray("label")));
 
 		List<RollbackRuleAttribute> rollbackRules = new ArrayList<>();
+		/**
+		 * 回滚,将每个回滚的异常类类名保存
+		 * @see RollbackRuleAttribute#RollbackRuleAttribute(Class) 
+		 */
 		for (Class<?> rbRule : attributes.getClassArray("rollbackFor")) {
 			rollbackRules.add(new RollbackRuleAttribute(rbRule));
 		}
 		for (String rbRule : attributes.getStringArray("rollbackForClassName")) {
 			rollbackRules.add(new RollbackRuleAttribute(rbRule));
 		}
+		/**
+		 * 不进行回滚操作的异常
+		 * @see NoRollbackRuleAttribute#NoRollbackRuleAttribute(Class)
+		 */
 		for (Class<?> rbRule : attributes.getClassArray("noRollbackFor")) {
 			rollbackRules.add(new NoRollbackRuleAttribute(rbRule));
 		}

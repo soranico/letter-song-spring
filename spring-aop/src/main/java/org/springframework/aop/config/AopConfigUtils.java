@@ -16,11 +16,9 @@
 
 package org.springframework.aop.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
+import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.InfrastructureAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -28,6 +26,9 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class for handling registration of AOP auto-proxy creators.
@@ -72,7 +73,16 @@ public abstract class AopConfigUtils {
 	@Nullable
 	public static BeanDefinition registerAutoProxyCreatorIfNecessary(
 			BeanDefinitionRegistry registry, @Nullable Object source) {
-
+		/**
+		 * 将 InfrastructureAdvisorAutoProxyCreator 注册 为 BD
+		 * @see InfrastructureAdvisorAutoProxyCreator
+		 * 这一步相当于 添加了了 解析 拦截器的 功能 只是 父类不会解析 注解的
+		 * @see AbstractAdvisorAutoProxyCreator#findCandidateAdvisors()
+		 *
+		 * 其中 子类 AnnotationAwareAspectJAutoProxyCreator 用于支持 Aspect
+		 * @see AnnotationAwareAspectJAutoProxyCreator
+		 *
+		 */
 		return registerOrEscalateApcAsRequired(InfrastructureAdvisorAutoProxyCreator.class, registry, source);
 	}
 
@@ -119,7 +129,15 @@ public abstract class AopConfigUtils {
 			Class<?> cls, BeanDefinitionRegistry registry, @Nullable Object source) {
 
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
-
+		/**
+		 * 如果 @EnableTransactionManagement @EnableAspectJAutoProxy 同时启用
+		 * 对于@EnableTransactionManagement 会注册
+		 * @see InfrastructureAdvisorAutoProxyCreator
+		 * 对于 @EnableAspectJAutoProxy
+		 * @see AnnotationAwareAspectJAutoProxyCreator
+		 * 因此保留优先级大的 AnnotationAwareAspectJAutoProxyCreator
+		 *
+		 */
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition apcDefinition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
 			if (!cls.getName().equals(apcDefinition.getBeanClassName())) {

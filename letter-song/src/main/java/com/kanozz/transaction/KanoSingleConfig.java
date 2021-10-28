@@ -9,23 +9,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @EnableTransactionManagement
-public class KanoConfig {
+public class KanoSingleConfig {
 
 
 	@Bean
 	public DataSource dataSource(){
 		DruidDataSource dataSource = new DruidDataSource();
 		dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/kano?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8");
-		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setUsername("root");
-		dataSource.setPassword("root");
-		return dataSource;
-	}
-
-	@Bean
-	public DataSource dataSource1(){
-		DruidDataSource dataSource = new DruidDataSource();
-		dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/kano_study?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8");
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource.setUsername("root");
 		dataSource.setPassword("root");
@@ -39,9 +29,6 @@ public class KanoConfig {
 	}
 
 
-	@Bean
-	public TransactionManager dataSourceTransactionManager1(DataSource dataSource1){
-		return new DataSourceTransactionManager(dataSource1);
-	}
+
 
 }
