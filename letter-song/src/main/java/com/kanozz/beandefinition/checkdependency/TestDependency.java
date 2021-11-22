@@ -3,16 +3,21 @@ package com.kanozz.beandefinition.checkdependency;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.beans.PropertyDescriptor;
 
 public class TestDependency {
 	private static final Logger log = LoggerFactory.getLogger(TestDependency.class);
 	/**
 	 *
-	 * 创建bean需要检查依赖项,只坚持对象
+	 * 创建bean需要检查依赖项,只检查对象
 	 * 并且检查属性,用过java内省技术(并非set方法截取)来查找需要
 	 * 注入的属性（并非所有属性都需要检查）
 	 * 对于KanoA,虽然有两个属性,但只有kanoB需要被检查
@@ -21,7 +26,12 @@ public class TestDependency {
 	 * 即使kanoB被显示表明需要注入,但因为内省不关注属性
 	 * 仍然会报错
 	 *
-	 *
+	 * 检查是在属性注入的时候进行的
+	 * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#populateBean(String, RootBeanDefinition, BeanWrapper)
+	 * 首先找到需要检查的set()而非找属性
+	 * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#filterPropertyDescriptorsForDependencyCheck(BeanWrapper, boolean)
+	 * 具体检查
+	 * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#checkDependencies(String, AbstractBeanDefinition, PropertyDescriptor[], PropertyValues)
 	 */
 	@Test
 	public void testCheckObject() {

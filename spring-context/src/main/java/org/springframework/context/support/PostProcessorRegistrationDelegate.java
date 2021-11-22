@@ -197,6 +197,7 @@ final class PostProcessorRegistrationDelegate {
 		 * 执行用户注册的bfpp过程中可能会对BD进行一些操作
 		 * 如果用户没有手动冻结factory,那么这里会标记已经合并的BD
 		 * 需要重新进行合并从而应用最新的属性值
+		 * @see DefaultListableBeanFactory#clearMetadataCache()
 		 */
 		beanFactory.clearMetadataCache();
 	}

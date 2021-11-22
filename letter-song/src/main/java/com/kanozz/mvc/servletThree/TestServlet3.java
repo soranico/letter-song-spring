@@ -6,6 +6,7 @@ import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.junit.Test;
 
+import javax.servlet.annotation.HandlesTypes;
 import java.io.File;
 
 public class TestServlet3 {
@@ -20,7 +21,8 @@ public class TestServlet3 {
 	 * 对于spring mvc 默认加载了 SpringServletContaierInitializer
 	 * @see org.springframework.web.SpringServletContainerInitializer
 	 *
-	 * 对于 @HandlerType注解而言会收集指定的接口所有实现
+	 * 对于 @HandlerType 注解而言会收集指定的接口所有实现
+	 * @see HandlesTypes
 	 * 并放入 onStartUp(）的形参中
 	 */
 	@Test

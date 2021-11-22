@@ -31,6 +31,11 @@ public class TestListener {
 	@Test
 	public void testProxySameListener(){
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		/**
+		 * 正在执行初始化之前手动添加
+		 * @see KanoApplicationListenerBpp#postProcessBeforeInitialization(Object, String)
+		 * 而代理是在属性填充后
+		 */
 		context.register(KanoApplicationListenerBpp.class, KanoListenerImpl.class,KanoAspect.class);
 		// aop支持
 		context.register(AnnotationAwareAspectJAutoProxyCreator.class);

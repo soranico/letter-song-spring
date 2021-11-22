@@ -1,5 +1,5 @@
 package com.kanozz.construct;
 
 
- class KanoB {
+class KanoB {
 }

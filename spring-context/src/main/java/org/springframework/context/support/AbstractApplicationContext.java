@@ -25,6 +25,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.support.ResourceEditorRegistrar;
 import org.springframework.context.*;
@@ -681,6 +682,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		/**
 		 * 防止继承 PriorityOrdered 接口的BPP 通过注解
 		 * 显示标记需要获取 ApplicationContext 失败
+		 * @see org.springframework.beans.factory.support.DefaultListableBeanFactory#addBeanPostProcessor(BeanPostProcessor)
 		 */
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		/**

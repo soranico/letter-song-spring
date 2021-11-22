@@ -509,11 +509,15 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		 * 如果没有冻结或者允许实例化懒加载的bean
 		 * 没有冻结每次都会遍历beanDefinitionNames(所有BD)
 		 * 并且合并没有合并的BD
+		 * @see DefaultListableBeanFactory#doGetBeanNamesForType(ResolvableType, boolean, boolean)
 		 */
 		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
 			return doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, allowEagerInit);
 		}
-		// 从缓存中获取
+		/**
+		 * 从缓存中获取
+		 * 已经准备创建bean了
+		 */
 		Map<Class<?>, String[]> cache =
 				(includeNonSingletons ? this.allBeanNamesByType : this.singletonBeanNamesByType);
 		String[] resolvedBeanNames = cache.get(type);
@@ -532,6 +536,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		List<String> result = new ArrayList<>();
 
 		// Check all bean definitions.
+		/**
+		 * 遍历所有的BD
+		 */
 		for (String beanName : this.beanDefinitionNames) {
 			// Only consider bean as eligible if the bean name is not defined as alias for some other bean.
 			if (!isAlias(beanName)) {
@@ -541,11 +548,18 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					if (!mbd.isAbstract() && (allowEagerInit ||
 							(mbd.hasBeanClass() || !mbd.isLazyInit() || isAllowEagerClassLoading()) &&
 									!requiresEagerInitForType(mbd.getFactoryBeanName()))) {
+						/**
+						 * 是否FactoryBean
+						 */
 						boolean isFactoryBean = isFactoryBean(beanName, mbd);
 						BeanDefinitionHolder dbd = mbd.getDecoratedDefinition();
 						boolean matchFound = false;
 						boolean allowFactoryBeanInit = (allowEagerInit || containsSingleton(beanName));
 						boolean isNonLazyDecorated = (dbd != null && !mbd.isLazyInit());
+						/**
+						 * 不是factoryBean那么只需要进行 class匹配
+						 * 类相同则是需要找的类型的beanName
+						 */
 						if (!isFactoryBean) {
 							if (includeNonSingletons || isSingleton(beanName, mbd, dbd)) {
 								matchFound = isTypeMatch(beanName, type, allowFactoryBeanInit);
@@ -672,6 +686,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Override
 	public String[] getBeanNamesForAnnotation(Class<? extends Annotation> annotationType) {
 		List<String> result = new ArrayList<>();
+		/**
+		 * 获取BD,如果包含指定注解则满足
+		 */
 		for (String beanName : this.beanDefinitionNames) {
 			BeanDefinition bd = this.beanDefinitionMap.get(beanName);
 			if (bd != null && !bd.isAbstract() && findAnnotationOnBean(beanName, annotationType) != null) {
@@ -858,6 +875,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public void clearMetadataCache() {
+		/**
+		 * 清除合并标记
+		 * @see AbstractBeanFactory#clearMetadataCache()
+		 */
 		super.clearMetadataCache();
 		this.mergedBeanDefinitionHolders.clear();
 		clearByTypeCache();

@@ -39,6 +39,7 @@ public class TestConfiguration {
 		// 手动注册一个BD,类型不能为 AnnotationBeanDefinition
 		context.registerBeanDefinition("kanoConfigurationWithExclude", new RootBeanDefinition(KanoConfigurationWithExclude.class));
 		context.refresh();
+		context.getBean(KanoA.class);
 	}
 
 

@@ -106,7 +106,9 @@ public abstract class AbstractApplicationEventMulticaster
 			 */
 			Object singletonTarget = AopProxyUtils.getSingletonTarget(listener);
 			if (singletonTarget instanceof ApplicationListener) {
-				// 移除在代理之前的,对于一个观察者而言, 代理 - 添加到集合中
+				/**
+				 * 保留最新的因为这个listener可能是走过代理逻辑的
+				 */
 				this.defaultRetriever.applicationListeners.remove(singletonTarget);
 			}
 			this.defaultRetriever.applicationListeners.add(listener);

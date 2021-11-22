@@ -4,6 +4,7 @@ import com.kanozz.beanfactory.clear.metacache.bfpp.ForceFactoryBeanFactoryPostPr
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -27,6 +28,12 @@ public class TestClearCache {
 	public void testClearCache() {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.scan("com.kanozz.beanfactory.clear.metacache");
+		/**
+		 * 这里首先冻结配置
+		 * 并不是说配置不生效
+		 * 在创建之前会强制进行一次合并
+		 * @see DefaultListableBeanFactory#preInstantiateSingletons()
+		 */
 		context.addBeanFactoryPostProcessor(ForceFactoryBeanFactoryPostProcessor.INSTANCE);
 		// 初次会创建,因为还是单例
 		context.refresh();

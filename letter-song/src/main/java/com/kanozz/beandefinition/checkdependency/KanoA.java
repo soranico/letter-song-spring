@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class KanoA {
 	private static final Logger log = LoggerFactory.getLogger(KanoA.class);
+
 	@Autowired
 	private KanoB kanoB;
+
 
 	private String kanoStr;
 
@@ -17,5 +19,9 @@ class KanoA {
 
 	public void setKanoStr(String kanoStr) {
 		this.kanoStr = kanoStr;
+	}
+
+	public void setKano(Integer kano){
+
 	}
 }

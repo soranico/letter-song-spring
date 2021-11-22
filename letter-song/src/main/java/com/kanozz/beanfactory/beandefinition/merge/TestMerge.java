@@ -4,22 +4,27 @@ import com.kanozz.beanfactory.clear.metacache.bfpp.ForceFactoryBeanFactoryPostPr
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.List;
 
 public class TestMerge {
 	private static final Logger log = LoggerFactory.getLogger(TestMerge.class);
 	/**
-	 * 1. addBeanFactoryPostProcessor注册的bdrpp执行前不需要
+	 * @see org.springframework.context.support.PostProcessorRegistrationDelegate#invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory, List)
+	 *
+	 * 1. addBeanFactoryPostProcessor 注册的bdrpp执行前不需要
 	 * 合并,因为bdrpp只能注册和修改已经有的BD
+	 * @see org.springframework.context.support.AbstractApplicationContext#addBeanFactoryPostProcessor(BeanFactoryPostProcessor)
+	 *
 	 * 2. 执行BeanFactoryPostProcessor执行会进行一次BD的合并
 	 * 因为api注册的bdrpp可能添加修改BD,每次执行bfpp之前都需要
 	 * 去获取一次但不会重新合并已经合并的,会合并新加的
 	 *
 	 * 3. 执行完bfpp默认会将所有已经合并的BD标记为需要
-	 * 重新合并,因为此时已经不涉及修改BD的操作,已经修改的
-	 * 需要生效
-	 *
-	 *
+	 * 重新合并,因为此时已经不涉及修改BD的操作,已经修改的需要生效
 	 *
 	 *
 	 */

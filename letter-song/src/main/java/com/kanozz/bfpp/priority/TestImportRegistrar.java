@@ -1,6 +1,7 @@
 package com.kanozz.bfpp.priority;
 
 import org.junit.Test;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -21,8 +22,11 @@ public class TestImportRegistrar {
 	 * 因此必须使用接口来设置这些值
 	 * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#initializeBean(String, Object, RootBeanDefinition)
 	 *
-	 * ApplicationContextAwareProcessor#postProcessBeforeInitialization(Object, String)
+	 * @see org.springframework.context.support.ApplicationContextAwareProcessor#postProcessBeforeInitialization(Object, String)
 	 * 处理Aware回调接口
+	 *
+	 * 这也是先执行工厂预处理的原因,因为需要先去注册一些基本的处理BFPP
+	 * @see org.springframework.context.support.AbstractApplicationContext#prepareBeanFactory(ConfigurableListableBeanFactory)
 	 *
 	 */
 	@Test

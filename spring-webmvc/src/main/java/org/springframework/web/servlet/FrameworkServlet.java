@@ -47,6 +47,7 @@ import org.springframework.web.context.support.ServletRequestHandledEvent;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.WebUtils;
 
@@ -282,6 +283,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see org.springframework.web.WebApplicationInitializer
 	 */
 	public FrameworkServlet(WebApplicationContext webApplicationContext) {
+		/**
+		 * org.springframework.web.servlet.support.AbstractDispatcherServletInitializer#registerDispatcherServlet(javax.servlet.ServletContext)
+		 */
 		this.webApplicationContext = webApplicationContext;
 	}
 
@@ -521,6 +525,12 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		long startTime = System.currentTimeMillis();
 
 		try {
+			/**
+			 * 初始化web容器
+			 * 对于mvc 这里会刷新容器
+			 * 对于 boot 这里只是收集 HandlerMapping等 bean
+			 *
+			 */
 			this.webApplicationContext = initWebApplicationContext();
 			initFrameworkServlet();
 		}
@@ -565,6 +575,15 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			wac = this.webApplicationContext;
 			if (wac instanceof ConfigurableWebApplicationContext) {
 				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
+				/**
+				 * spring boot而言是容器启动Tomcat
+				 * 调用进来，此时设置到web容器上下文中的容器
+				 * 是肯定已经执行过的了
+				 *
+				 * 对于spring mvc而言这里是新建的一个
+				 * @see AbstractDispatcherServletInitializer#registerDispatcherServlet(javax.servlet.ServletContext)
+				 * 因此这个容器还没有进行refresh()
+				 */
 				if (!cwac.isActive()) {
 					// The context has not yet been refreshed -> provide services such as
 					// setting the parent context, setting the application context id, etc
@@ -601,7 +620,13 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			// No context instance is defined for this servlet -> create a local one
 			wac = createWebApplicationContext(rootContext);
 		}
-
+		/**
+		 * 如果是spring boot这里因为没有添加监听者
+		 * 因此这个字段还是false
+		 * @see FrameworkServlet#onApplicationEvent(org.springframework.context.event.ContextRefreshedEvent)
+		 * 因此会在这里手动调用获取 HandlerMapping 和 HandlerAdapter 这些bean
+		 * @see DispatcherServlet#initStrategies(ApplicationContext)
+		 */
 		if (!this.refreshEventReceived) {
 			// Either the context is not a ConfigurableApplicationContext with refresh
 			// support or the context injected at construction time had already been
@@ -681,6 +706,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		return wac;
 	}
 
+	/**
+	 * spring boot不会添加监听者
+	 * 因为此时容器已经启动完了
+	 */
 	protected void configureAndRefreshWebApplicationContext(ConfigurableWebApplicationContext wac) {
 		if (ObjectUtils.identityToString(wac).equals(wac.getId())) {
 			// The application context id is still set to its original default value
@@ -1018,7 +1047,6 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		/**
 		 * @see SimpleLocaleContext
 		 * 用于存放国际化
-		 *
 		 */
 		LocaleContext previousLocaleContext = LocaleContextHolder.getLocaleContext();
 		LocaleContext localeContext = buildLocaleContext(request);
@@ -1059,6 +1087,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		}
 
 		finally {
+			/**
+			 * 重置线程上下文中的值
+			 * 比如 Request Response 等
+			 */
 			resetContextHolders(request, previousLocaleContext, previousAttributes);
 			if (requestAttributes != null) {
 				requestAttributes.requestCompleted();

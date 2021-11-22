@@ -372,6 +372,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeansException {
 
 		Object result = existingBean;
+		/**
+		 * 执行回调方法
+		 * @see org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor#postProcessBeforeInitialization(Object, String) 
+		 */
 		for (BeanPostProcessor processor : getBeanPostProcessors()) {
 			Object current = processor.postProcessBeforeInitialization(result, beanName);
 			if (current == null) {
@@ -559,6 +563,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			populateBean(beanName, mbd, instanceWrapper);
 			/**
 			 * 调用回调方法
+			 * 生成代理
 			 */
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
@@ -1363,6 +1368,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		boolean hasInstAwareBpps = hasInstantiationAwareBeanPostProcessors();
+		/**
+		 * 需要进行依赖检查
+		 */
 		boolean needsDepCheck = (mbd.getDependencyCheck() != AbstractBeanDefinition.DEPENDENCY_CHECK_NONE);
 
 		PropertyDescriptor[] filteredPds = null;
@@ -1384,10 +1392,21 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				pvs = pvsToUse;
 			}
 		}
+		/**
+		 * 进行依赖检查
+		 */
 		if (needsDepCheck) {
+			/**
+			 * 首先找到所有的写方法
+			 * 不是找属性
+			 */
 			if (filteredPds == null) {
 				filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
 			}
+			/**
+			 * 进行校验
+			 * @see AbstractAutowireCapableBeanFactory#checkDependencies(String, AbstractBeanDefinition, PropertyDescriptor[], PropertyValues) 
+			 */
 			checkDependencies(beanName, mbd, filteredPds, pvs);
 		}
 
@@ -1738,10 +1757,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		/**
 		 * 在调用初始化方法之前进行一些操作
 		 * @see org.springframework.context.support.ApplicationContextAwareProcessor
-		 * 处理回调接口方法
-		 * 这个是在
-		 * @see org.springframework.context.support.AbstractApplicationContext#prepareBeanFactory(ConfigurableListableBeanFactory)
-		 * 添加的
+		 * 处理回调接口方法这个是在
+		 * @see org.springframework.context.support.AbstractApplicationContext#prepareBeanFactory(ConfigurableListableBeanFactory) 添加的
+		 * 
+		 * @see org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor#postProcessBeforeInitialization(Object, String)
 		 */
 		if (mbd == null || !mbd.isSynthetic()) {
 			wrappedBean = applyBeanPostProcessorsBeforeInitialization(wrappedBean, beanName);
@@ -1763,7 +1782,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			/**
 			 * 生成代理
 			 * 调用初始化完成的方法
-			 * @see AbstractAutowireCapableBeanFactory#applyBeanPostProcessorsAfterInitialization(Object, String) 
+			 * @see AbstractAutowireCapableBeanFactory#applyBeanPostProcessorsAfterInitialization(Object, String) 生成代理
 			 */
 			wrappedBean = applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName);
 		}

@@ -228,7 +228,7 @@ public class TestZeroStart {
 	 * ##### 映射关系建立
 	 * 1.首先从spring容器中取出所有的bean
 	 * @see AbstractHandlerMethodMapping#initHandlerMethods()
-	 *
+	 *A
 	 * 2.如果当前bean是匹配的那么会进行处理
 	 * @see AbstractHandlerMethodMapping#detectHandlerMethods(Object)
 	 *

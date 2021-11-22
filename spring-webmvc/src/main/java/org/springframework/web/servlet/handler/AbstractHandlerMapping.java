@@ -522,6 +522,9 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 		 * 一般请求返回的是 HandlerMethod
 		 * @see org.springframework.web.method.HandlerMethod
 		 * @see AbstractHandlerMapping#getHandlerInternal(HttpServletRequest)
+		 *
+		 * 获取 HandlerMethod
+		 * @see AbstractHandlerMethodMapping#getHandlerInternal(HttpServletRequest)
 		 */
 		Object handler = getHandlerInternal(request);
 		if (handler == null) {

@@ -167,7 +167,9 @@ class ConfigurationClassParser {
 						"Failed to parse configuration class [" + bd.getBeanClassName() + "]", ex);
 			}
 		}
-
+		/**
+		 * 处理延迟加载的Import的类
+		 */
 		this.deferredImportSelectorHandler.process();
 	}
 
@@ -289,6 +291,11 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
+		/**
+		 * 处理
+		 * @see Import
+		 *
+		 */
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
@@ -571,15 +578,29 @@ class ConfigurationClassParser {
 			this.importStack.push(configClass);
 			try {
 				for (SourceClass candidate : importCandidates) {
+					/**
+					 * 被导入的是
+					 * @see ImportSelector 实例
+					 */
 					if (candidate.isAssignable(ImportSelector.class)) {
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
 						Class<?> candidateClass = candidate.loadClass();
+						/**
+						 * 创建实例并且会执行Aware接口的方法
+						 * @see ParserStrategyUtils#invokeAwareMethods(Object, Environment, ResourceLoader, BeanDefinitionRegistry, ClassLoader)
+						 */
 						ImportSelector selector = ParserStrategyUtils.instantiateClass(candidateClass, ImportSelector.class,
 								this.environment, this.resourceLoader, this.registry);
 						Predicate<String> selectorFilter = selector.getExclusionFilter();
 						if (selectorFilter != null) {
 							exclusionFilter = exclusionFilter.or(selectorFilter);
 						}
+						/**
+						 * 延迟处理导入的类
+						 * @see DeferredImportSelectorHandler#process()
+						 * 这个是在处理完配置类后执行的
+						 * @see org.springframework.context.annotation.ConfigurationClassParser#parse(java.util.Set)
+						 */
 						if (selector instanceof DeferredImportSelector) {
 							this.deferredImportSelectorHandler.handle(configClass, (DeferredImportSelector) selector);
 						}
@@ -698,6 +719,9 @@ class ConfigurationClassParser {
 		if (className.startsWith("java")) {
 			// Never use ASM for core java types
 			try {
+				/**
+				 * 进行类加载加载当前的配置类
+				 */
 				return new SourceClass(ClassUtils.forName(className, this.resourceLoader.getClassLoader()));
 			}
 			catch (ClassNotFoundException ex) {
@@ -818,8 +842,23 @@ class ConfigurationClassParser {
 			for (DeferredImportSelectorGrouping grouping : this.groupings.values()) {
 				Predicate<String> exclusionFilter = grouping.getCandidateFilter();
 				grouping.getImports().forEach(entry -> {
+					/**
+					 * 获取已经处理的配置类
+					 * 因为被导入的类的入口肯定是由某个配置类引入的
+					 * 获取的就是那个配置类
+					 * @see ConfigurationClassParser#processConfigurationClass(org.springframework.context.annotation.ConfigurationClass, java.util.function.Predicate)
+					 * @Import(B)
+					 * A{
+					 * }
+					 * 那么B就是A引入的
+					 */
 					ConfigurationClass configurationClass = this.configurationClasses.get(entry.getMetadata());
 					try {
+						/**
+						 * 依次处理每个被导入的类
+						 * @see DeferredImportSelector#selectImports(AnnotationMetadata)
+						 * 将每个类名当做一个新的导入类来进行处理
+						 */
 						processImports(configurationClass, asSourceClass(configurationClass, exclusionFilter),
 								Collections.singleton(asSourceClass(entry.getImportClassName(), exclusionFilter)),
 								exclusionFilter, false);
@@ -886,7 +925,19 @@ class ConfigurationClassParser {
 		 * @return each import with its associated configuration class
 		 */
 		public Iterable<Group.Entry> getImports() {
+			/**
+			 * 遍历每个
+			 * @see DeferredImportSelector 实例
+			 *
+			 */
 			for (DeferredImportSelectorHolder deferredImport : this.deferredImports) {
+				/**
+				 * 这个group 是每个实现类具体的配置
+				 * @see DeferredImportSelector#getImportGroup()
+				 *
+				 * 比如spring boot的自动装配
+				 * @see org.springframework.boot.autoconfigure.AutoConfigurationImportSelector#getImportGroup
+				 */
 				this.group.process(deferredImport.getConfigurationClass().getMetadata(),
 						deferredImport.getImportSelector());
 			}

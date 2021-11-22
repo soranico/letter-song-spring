@@ -371,6 +371,12 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 
 		int numUnboundArgs = this.parameterTypes.length;
 		Class<?>[] parameterTypes = this.aspectJAdviceMethod.getParameterTypes();
+		/**
+		 * 第一个参数是 JoinPoint ProceedingJoinPoint  JoinPoint.StaticPart
+		 * @see JoinPoint
+		 * @see ProceedingJoinPoint
+		 * @see org.aspectj.lang.JoinPoint.StaticPart
+		 */
 		if (maybeBindJoinPoint(parameterTypes[0]) || maybeBindProceedingJoinPoint(parameterTypes[0]) ||
 				maybeBindJoinPointStaticPart(parameterTypes[0])) {
 			numUnboundArgs--;
@@ -631,6 +637,9 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 			actualArgs = null;
 		}
 		try {
+			/**
+			 * 反射调用方法
+			 */
 			ReflectionUtils.makeAccessible(this.aspectJAdviceMethod);
 			return this.aspectJAdviceMethod.invoke(this.aspectInstanceFactory.getAspectInstance(), actualArgs);
 		}

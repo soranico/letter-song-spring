@@ -10,7 +10,7 @@ class KanoB {
 //		log.info("KanoB create");
 	}
 
-	KanoB createKanoB(){
+	public static KanoB createKanoB(){
 //		log.info("start create kanoB");
 		return new KanoB();
 	}

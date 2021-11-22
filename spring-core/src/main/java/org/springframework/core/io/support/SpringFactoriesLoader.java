@@ -16,28 +16,17 @@
 
 package org.springframework.core.io.support;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.stream.Collectors;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.io.UrlResource;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ConcurrentReferenceHashMap;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * General purpose factory loading mechanism for internal use within the framework.
@@ -129,10 +118,19 @@ public final class SpringFactoriesLoader {
 			classLoaderToUse = SpringFactoriesLoader.class.getClassLoader();
 		}
 		String factoryTypeName = factoryType.getName();
+		/**
+		 * 从 META-INF/spring.factories
+		 * 配置中加载指定key对应的value
+		 */
 		return loadSpringFactories(classLoaderToUse).getOrDefault(factoryTypeName, Collections.emptyList());
 	}
 
 	private static Map<String, List<String>> loadSpringFactories(ClassLoader classLoader) {
+		/**
+		 * 先从缓存中加载
+		 * 类加载需要 ClassLoader
+		 * 因此key为 ClassLoader
+		 */
 		Map<String, List<String>> result = cache.get(classLoader);
 		if (result != null) {
 			return result;

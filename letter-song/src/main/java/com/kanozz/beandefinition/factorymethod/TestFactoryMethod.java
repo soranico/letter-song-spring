@@ -63,6 +63,10 @@ public class TestFactoryMethod {
 	 * 因为非静态方法需要先有对象和创建bean的
 	 * 过程相冲突
 	 *
+	 * 此时指定的这个方法必须是static
+	 * 因为实例方法需要创建对象本身就处在创建对象的过程
+	 * 自相矛盾
+	 *
 	 */
 	@Test
 	public void testJustMethod() {

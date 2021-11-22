@@ -49,6 +49,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
+import org.springframework.web.servlet.support.AbstractDispatcherServletInitializer;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.ServletRequestPathUtils;
 import org.springframework.web.util.WebUtils;
@@ -401,6 +402,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	public DispatcherServlet(WebApplicationContext webApplicationContext) {
 		/**
 		 * 设置spring容器为mvc 容器
+		 * @see AbstractDispatcherServletInitializer#registerDispatcherServlet(javax.servlet.ServletContext)
 		 */
 		super(webApplicationContext);
 
@@ -956,7 +958,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		// Make framework objects available to handlers and view objects.
 		/**
 		 * 添加属性到request
-		 * 添加了 当前spring的环境 mvc
+		 * 添加了 当前spring的环境 到属性值中 mvc
 		 */
 		request.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, getWebApplicationContext());
 		request.setAttribute(LOCALE_RESOLVER_ATTRIBUTE, this.localeResolver);
@@ -1274,6 +1276,9 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 			else {
 				try {
+					/**
+					 * 解析文件上传
+					 */
 					return this.multipartResolver.resolveMultipart(request);
 				}
 				catch (MultipartException ex) {

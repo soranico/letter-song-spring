@@ -472,6 +472,10 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		if (directPathMatches != null) {
 			addMatchingMappings(directPathMatches, matches, request);
 		}
+		/**
+		 * 如果没有找到那么从所有的路径中进行匹配
+		 * 一般都可以找到
+		 */
 		if (matches.isEmpty()) {
 			addMatchingMappings(this.mappingRegistry.getRegistrations().keySet(), matches, request);
 		}
@@ -496,6 +500,9 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				}
 				else {
 					Match secondBestMatch = matches.get(1);
+					/**
+					 * 有两个一样匹配的那么抛出异常
+					 */
 					if (comparator.compare(bestMatch, secondBestMatch) == 0) {
 						Method m1 = bestMatch.getHandlerMethod().getMethod();
 						Method m2 = secondBestMatch.getHandlerMethod().getMethod();
