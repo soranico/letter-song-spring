@@ -114,6 +114,10 @@ class ConfigurationClassBeanDefinitionReader {
 	public void loadBeanDefinitions(Set<ConfigurationClass> configurationModel) {
 		TrackedConditionEvaluator trackedConditionEvaluator = new TrackedConditionEvaluator();
 		for (ConfigurationClass configClass : configurationModel) {
+			/**
+			 * 处理每个配置类
+			 * @see ConfigurationClassBeanDefinitionReader#loadBeanDefinitionsForConfigurationClass(ConfigurationClass, TrackedConditionEvaluator)
+			 */
 			loadBeanDefinitionsForConfigurationClass(configClass, trackedConditionEvaluator);
 		}
 	}
@@ -134,17 +138,18 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 		/**
-		 * 处理被Import的类
-		 * @see ConfigurationClassBeanDefinitionReader#registerBeanDefinitionForImportedConfigurationClass(ConfigurationClass)
+		 * 处理被@Bean 标记的方法
+		 * @see ConfigurationClassBeanDefinitionReader#loadBeanDefinitionsForBeanMethod(BeanMethod)  处理@Bean
 		 */
-		if (configClass.isImported()) {
-			registerBeanDefinitionForImportedConfigurationClass(configClass);
-		}
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		/**
+		 * 处理
+		 * @see ImportBeanDefinitionRegistrar 接口手动添加的 BD
+		 */
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 
@@ -197,6 +202,10 @@ class ConfigurationClassBeanDefinitionReader {
 		String beanName = (!names.isEmpty() ? names.remove(0) : methodName);
 
 		// Register aliases even when overridden
+		/**
+		 * 注册别名和beanName的映射关系
+		 * @see DefaultListableBeanFactory#aliasMap
+		 */
 		for (String alias : names) {
 			this.registry.registerAlias(beanName, alias);
 		}
@@ -213,7 +222,11 @@ class ConfigurationClassBeanDefinitionReader {
 
 		ConfigurationClassBeanDefinition beanDef = new ConfigurationClassBeanDefinition(configClass, metadata, beanName);
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
-
+		/**
+		 * 静态方法
+		 * 此时只需要方法所在的类
+		 * 因为不需要对象调用
+		 */
 		if (metadata.isStatic()) {
 			// static @Bean method
 			if (configClass.getMetadata() instanceof StandardAnnotationMetadata) {
@@ -233,7 +246,9 @@ class ConfigurationClassBeanDefinitionReader {
 		if (metadata instanceof StandardMethodMetadata) {
 			beanDef.setResolvedFactoryMethod(((StandardMethodMetadata) metadata).getIntrospectedMethod());
 		}
-
+		/**
+		 * 设置注入模型为构造方法注入
+		 */
 		beanDef.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
 		beanDef.setAttribute(org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor.
 				SKIP_REQUIRED_CHECK_ATTRIBUTE, Boolean.TRUE);

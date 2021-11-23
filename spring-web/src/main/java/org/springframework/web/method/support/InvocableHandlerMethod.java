@@ -176,6 +176,9 @@ public class InvocableHandlerMethod extends HandlerMethod {
 			/**
 			 * 调用参数解析器集合，先从缓存中获取，然后在遍历每个解析器进行匹配
 			 * @see HandlerMethodArgumentResolverComposite#supportsParameter(MethodParameter)
+			 *
+			 * 会比较所属类以及在方法中的位置等信息
+			 * @see MethodParameter#equals(Object)
 			 */
 			if (!this.resolvers.supportsParameter(parameter)) {
 				throw new IllegalStateException(formatArgumentError(parameter, "No suitable resolver"));

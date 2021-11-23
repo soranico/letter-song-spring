@@ -71,9 +71,11 @@ public class AutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 				if (mode == AdviceMode.PROXY) {
 					/**
 					 * 注册代理环境
-					 * 如果当前没有启用注解环境
+					 * 如果当前没有启用代理环境
 					 * @see org.springframework.aop.framework.autoproxy.InfrastructureAdvisorAutoProxyCreator
 					 * 这个bean 不会处理 aspect的注解代理
+					 *
+					 * @see org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator
 					 */
 					AopConfigUtils.registerAutoProxyCreatorIfNecessary(registry);
 					if ((Boolean) proxyTargetClass) {

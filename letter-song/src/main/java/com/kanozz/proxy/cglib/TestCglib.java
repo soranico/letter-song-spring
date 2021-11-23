@@ -6,12 +6,11 @@ import org.springframework.aop.TargetSource;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.ReflectiveMethodInvocation;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.AbstractBeanFactory;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.*;
 import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.type.AnnotationMetadata;
 
 import java.lang.reflect.Method;
 
@@ -23,6 +22,11 @@ public class TestCglib {
 	}
 
 	/**
+	 *
+	 * @see org.springframework.context.annotation.EnableAspectJAutoProxy
+	 * @see org.springframework.context.annotation.AspectJAutoProxyRegistrar#registerBeanDefinitions(AnnotationMetadata, BeanDefinitionRegistry)
+	 *
+	 *
 	 * 代理类里面在调用方法时会调用
 	 * this.CGLIB$CALLBACK_0.intercept()
 	 * 而这个对象的值是 Callback[] callbacks 

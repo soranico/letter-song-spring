@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.accept.ContentNegotiationManager;
+import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.handler.AbstractHandlerMethodMapping;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -304,7 +306,7 @@ public class TestZeroStart {
 	 *
 	 * 3. 调用方法之前调用前置拦截器
 	 * @see org.springframework.web.servlet.HandlerExecutionChain#applyPreHandle(HttpServletRequest, HttpServletResponse)
-	 * 如果前置拦截器返回false,那么会执行拦截器的处理完成方法
+	 * 如果前置拦截器返回 false ,那么会执行拦截器的处理完成方法(只会执行当前返回false的这个拦截器的 完成方法)
 	 * 但不会真正调用方法
 	 * @see org.springframework.web.servlet.HandlerExecutionChain#triggerAfterCompletion(HttpServletRequest, HttpServletResponse, Exception)
 	 *
@@ -328,6 +330,7 @@ public class TestZeroStart {
 	 * @see org.springframework.web.method.support.HandlerMethodArgumentResolverComposite#getArgumentResolver(MethodParameter)
 	 * 会调用每个具体解析器是否支持处理这个类型的参数,例如解析 @RequestBody的 RequestResponseBodyMethodProcessor
 	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#supportsParameter(MethodParameter)
+	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#resolveArgument(MethodParameter, ModelAndViewContainer, NativeWebRequest, WebDataBinderFactory) 
 	 *
 	 * 4.1.1.2 反射调用方法
 	 * @see org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod#doInvoke(Object...)
@@ -359,6 +362,10 @@ public class TestZeroStart {
 	 * @see org.springframework.http.converter.GenericHttpMessageConverter#canWrite(Type, Class, MediaType)
 	 * 在写出消息之前需要调用 @ResponseBodyAdvice 标记的 bean 处理消息
 	 * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyAdviceChain#beforeBodyWrite(Object, MethodParameter, MediaType, Class, ServerHttpRequest, ServerHttpResponse)
+	 *
+	 * 这个集合是在
+	 * @see RequestMappingHandlerAdapter#afterPropertiesSet()
+	 *
 	 * 如果处理后的数据不为null 那么会调用具体的消息转换器将消息写出
 	 * 比如默认的 jackson
 	 * @see org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter

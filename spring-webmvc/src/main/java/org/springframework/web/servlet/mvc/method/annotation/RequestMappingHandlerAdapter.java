@@ -533,6 +533,10 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	@Override
 	public void afterPropertiesSet() {
 		// Do this first, it may add ResponseBody advice beans
+		/**
+		 * 初始化
+		 * @see RequestBodyAdvice
+		 */
 		initControllerAdviceCache();
 
 		if (this.argumentResolvers == null) {
@@ -852,7 +856,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
 			ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
 			/**
-			 * 创建
+			 * 创建反射调用实例
 			 */
 			ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);
 			/**

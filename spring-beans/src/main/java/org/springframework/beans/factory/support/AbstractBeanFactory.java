@@ -659,7 +659,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@Override
 	@Nullable
 	public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
-		return getType(name, true);
+		return getType(name, true);/** 这个时候传入的就是运行提前引用了 */
 	}
 
 	@Override

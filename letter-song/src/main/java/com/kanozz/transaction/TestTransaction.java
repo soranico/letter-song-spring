@@ -1,5 +1,6 @@
 package com.kanozz.transaction;
 
+import org.aopalliance.intercept.MethodInvocation;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,9 @@ public class TestTransaction {
 	 * @see ProxyTransactionManagementConfiguration#transactionAttributeSource()
 	 *
 	 * 二. 代理方法最终调用
+	 * 首先调用拦截器
+	 * @see org.springframework.transaction.interceptor.TransactionInterceptor#invoke(MethodInvocation)
+	 * 然后最终调用
 	 * @see TransactionAspectSupport#invokeWithinTransaction(Method, Class, TransactionAspectSupport.InvocationCallback)
 	 *
 	 * 1. 解析方法的注解信息
@@ -89,10 +93,16 @@ public class TestTransaction {
 	 *
 	 * 3.1.1 已存在事务
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager#isExistingTransaction(Object)
+	 * 如果存在那么这个值是从TL里获取的必然不是第一次获取了
+	 * @see DataSourceTransactionManager#isExistingTransaction(Object)
 	 * 处理已存在事务
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager#handleExistingTransaction(TransactionDefinition, Object, boolean)
 	 * 当前调用方法不支持事务直接异常
+	 *
 	 * 当前调用方法不用事务，挂起事务封装线程上下文和事务信息
+	 * 不支持事务会设置事务状态为false因为在准备事务的时候传入的是null
+	 * @see AbstractPlatformTransactionManager#prepareTransactionStatus(TransactionDefinition, Object, boolean, boolean, boolean, Object)
+	 * @see AbstractPlatformTransactionManager#prepareSynchronization(DefaultTransactionStatus, TransactionDefinition)
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager.SuspendedResourcesHolder
 	 * 内嵌事务,创建保存点执行
 	 * 新事务,创建新事务执行
@@ -112,6 +122,7 @@ public class TestTransaction {
 	 * @see DataSourceTransactionManager#doBegin(Object, TransactionDefinition)
 	 * 只有 ConnectionHolder 为空 也就是当前线程上下文没有事务信息的时候才会获取
 	 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager.DataSourceTransactionObject
+	 *
 	 * 只读事务会首先执行
 	 * SET TRANSACTION READ ONLY
 	 * 绑定事务到线程上下文

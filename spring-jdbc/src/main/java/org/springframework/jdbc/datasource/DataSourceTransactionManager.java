@@ -265,7 +265,9 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
 		/**
 		 * 事务包含连接信息也就是这个线程已经获取过
-		 * 连接信息
+		 * 如果存在连接信息
+		 * @see TransactionSynchronizationManager#getResource(Object)
+		 * 就说明TL里面存在也就是必然不是第一次获取连接信息
 		 */
 		return (txObject.hasConnectionHolder() && txObject.getConnectionHolder().isTransactionActive());
 	}
@@ -412,7 +414,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 					"] rollback-only");
 		}
 		/**
-		 * 设置 ConnectionHolder 的 rollbackOnly 标识为false
+		 * 设置 ConnectionHolder 的 rollbackOnly 标识为true
 		 * @see ConnectionHolder#setRollbackOnly()
 		 */
 		txObject.setRollbackOnly();

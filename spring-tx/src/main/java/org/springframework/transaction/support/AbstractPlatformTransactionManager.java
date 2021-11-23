@@ -471,14 +471,18 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			 * 先挂起事务
 			 * @see AbstractPlatformTransactionManager#suspend(Object)
 			 * 此时会清空线程上下文中的事务状态
-			 * 会将这些状态封装为一个新的对象
+			 *
+			 * 会将这些状态封装为一个新的对象并返回
 			 * @see SuspendedResourcesHolder
+			 * 也就是这个对象里面存储了之前事务的所有信息
 			 */
 			Object suspendedResources = suspend(transaction);
 			boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
 			/**
 			 * 此时创建的对象传入的 状态为 false 不是一个新事务
-			 * @see DefaultTransactionStatus 
+			 * @see DefaultTransactionStatus
+			 *
+			 * 这里传入的 transaction值为空
 			 */
 			return prepareTransactionStatus(
 					definition, null, false, newSynchronization, debugEnabled, suspendedResources);
@@ -613,6 +617,8 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		 * newSynchronization 一般是true
 		 * 并且如果线程上下文没有值
 		 * 那么表明确实需要开启一个新的事务
+		 * 只有新事务才会设置而且执行一次
+		 * @see AbstractPlatformTransactionManager#prepareTransactionStatus(TransactionDefinition, Object, boolean, boolean, boolean, Object) 
 		 */
 		boolean actualNewSynchronization = newSynchronization &&
 				!TransactionSynchronizationManager.isSynchronizationActive();
@@ -635,6 +641,10 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		 * 一旦设置后这个值就是false 以此保证只执行以此
 		 */
 		if (status.isNewSynchronization()) {
+			/**
+			 * 在不支持事务的时候因为传入的事务是null
+			 * 因此这里设置的就是false
+			 */
 			TransactionSynchronizationManager.setActualTransactionActive(status.hasTransaction());
 			TransactionSynchronizationManager.setCurrentTransactionIsolationLevel(
 					definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT ?
@@ -644,6 +654,9 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			/**
 			 * 设置线程上下文 synchronizations
 			 * @see TransactionSynchronizationManager#synchronizations
+			 * 这个里面可以添加回调事件在事务提交前或提交后执行一些操作
+			 * @see AbstractPlatformTransactionManager#triggerBeforeCommit(DefaultTransactionStatus)
+			 * @see AbstractPlatformTransactionManager#triggerAfterCommit(DefaultTransactionStatus)
 			 */
 			TransactionSynchronizationManager.initSynchronization();
 		}
@@ -695,6 +708,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 				 * 挂起当前事务
 				 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager#doSuspend(java.lang.Object)
 				 * 清空 ConnectionHolder 并且 从线程上下文解绑
+				 *
 				 * 返回的是封装之前的事务的
 				 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager.DataSourceTransactionObject
 				 */
@@ -872,10 +886,20 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			try {
 				boolean unexpectedRollback = false;
 				prepareForCommit(status);
+				/**
+				 * 在进行提交之前执行注册到
+				 * @see TransactionSynchronizationManager#synchronizations
+				 * 注册
+				 * @see TransactionSynchronizationManager#registerSynchronization(TransactionSynchronization)
+				 *
+				 * @see AbstractPlatformTransactionManager#triggerBeforeCommit(DefaultTransactionStatus)在事务提交前执行
+				 */
 				triggerBeforeCommit(status);
 				triggerBeforeCompletion(status);
 				beforeCompletionInvoked = true;
-
+				/**
+				 * 事务存在回滚点释放回滚点
+				 */
 				if (status.hasSavepoint()) {
 					if (status.isDebug()) {
 						logger.debug("Releasing transaction savepoint");
@@ -888,6 +912,10 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 						logger.debug("Initiating transaction commit");
 					}
 					unexpectedRollback = status.isGlobalRollbackOnly();
+					/**
+					 * 进行事务的提交
+					 * @see org.springframework.jdbc.datasource.DataSourceTransactionManager#doCommit(org.springframework.transaction.support.DefaultTransactionStatus)
+					 */
 					doCommit(status);
 				}
 				else if (isFailEarlyOnGlobalRollbackOnly()) {
@@ -927,6 +955,9 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			// Trigger afterCommit callbacks, with an exception thrown there
 			// propagated to callers but the transaction still considered as committed.
 			try {
+				/**
+				 *
+				 */
 				triggerAfterCommit(status);
 			}
 			finally {

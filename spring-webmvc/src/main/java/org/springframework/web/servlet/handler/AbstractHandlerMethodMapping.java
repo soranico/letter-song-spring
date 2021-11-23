@@ -302,6 +302,8 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			 * 查找所有满足的方法并建立 映射关系
 			 * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#getMappingForMethod(Method, Class)
 			 *
+			 * 返回
+			 * @see RequestMappingInfo
 			 */
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
@@ -320,7 +322,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				mappingsLogger.debug(formatMappings(userType, methods));
 			}
 			/**
-			 *
+			 * 遍历方法和MappingInfo的映射
 			 */
 			methods.forEach((method, mapping) -> {
 				/**
@@ -525,6 +527,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 		for (T mapping : mappings) {
 			T match = getMatchingMapping(mapping, request);
 			if (match != null) {
+				/**
+				 * @see MappingRegistry#register(Object, Object, Method)
+				 * 最后添加了 Mapping 和  MappingRegistration 的映射
+				 * @see MappingRegistration
+				 */
 				matches.add(new Match(match, this.mappingRegistry.getRegistrations().get(mapping)));
 			}
 		}
