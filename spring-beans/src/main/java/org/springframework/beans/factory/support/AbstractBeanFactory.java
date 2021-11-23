@@ -202,7 +202,14 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected <T> T doGetBean(
 			String name, @Nullable Class<T> requiredType, @Nullable Object[] args, boolean typeCheckOnly)
 			throws BeansException {
-
+		/**
+		 * 此步会去除 &kanoA
+		 * 因为单列池存放的是 kanoA
+		 * @see DefaultListableBeanFactory#singletonObjects
+		 * 而真实的bean在另一个map
+		 * @see DefaultListableBeanFactory#factoryBeanObjectCache
+		 * 两个的key是相同的
+		 */
 		String beanName = transformedBeanName(name);
 		Object beanInstance;
 
