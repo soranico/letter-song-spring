@@ -280,5 +280,18 @@ public class TestTransaction {
 	}
 
 
+	@Test
+	public void testTransactionWithClass() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register(KanoConfig.class);
+		context.register(TransactionKanoAWithClass.class);
+		context.refresh();
+		TransactionKanoAWithClass transactionKano = context.getBean(TransactionKanoAWithClass.class);
+		transactionKano.testTransactionAA();
+	}
+
+
+
+
 
 }

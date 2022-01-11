@@ -257,6 +257,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 			}
 
+			/**
+			 * 强制标记这个BD需要重新合并一遍
+			 * 创建的时候使用的是合并过的缓存中
+			 * @see DefaultListableBeanFactory#mergedBeanDefinitions
+			 * 而修改是,因此属性需要重新合并
+			 * @see DefaultListableBeanFactory#beanDefinitionMap
+			 */
 			if (!typeCheckOnly) {
 				markBeanAsCreated(beanName);
 			}
@@ -267,6 +274,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				if (requiredType != null) {
 					beanCreation.tag("beanType", requiredType::toString);
 				}
+				/**
+				 * 这里会重新进行和合并,如果合并后是Prototype
+				 * 那么会走原型创建流程
+				 */
 				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
@@ -316,6 +327,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					finally {
 						afterPrototypeCreation(beanName);
 					}
+					/**
+					 * 这里需要重新获取一下
+					 * 因为在循环依赖情况下有的bean是提前创建的
+					 * 不会走最外层循环判断是不是FactoryBean
+					 * 所以这里要走一遍FactoryBean的逻辑
+					 */
 					beanInstance = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
 				}
 
@@ -1791,8 +1808,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (!this.alreadyCreated.contains(beanName)) {
 			synchronized (this.mergedBeanDefinitions) {
 				/**
-				 * 在准备创建之前,强制标记已经需要合并过的BD
-				 * 需要再次合并
+				 * 在准备创建之前,强制标记已经需要合并过的BD需要再次合并
+				 * 但是此时已经处于创建的过程中了,就算合并后变成了 prototype 也是会创建的
+				 * @see AbstractBeanFactory#clearMergedBeanDefinition(String)
 				 */
 				if (!this.alreadyCreated.contains(beanName)) {
 					// Let the bean definition get re-merged now that we're actually creating

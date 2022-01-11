@@ -2,6 +2,7 @@ package com.kanozz.proxy.cglib;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 public class KanoCglib {
 	private static final Logger log = LoggerFactory.getLogger(KanoCglib.class);

@@ -23,6 +23,7 @@ import org.springframework.aop.AopInvocationException;
 import org.springframework.aop.RawTargetAccess;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.support.AopUtils;
+import org.springframework.aop.target.AbstractLazyCreationTargetSource;
 import org.springframework.core.DecoratingProxy;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
@@ -199,6 +200,12 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 
 			// Get as late as possible to minimize the time we "own" the target,
 			// in case it comes from a pool.
+			/**
+			 * 获取真实的调用对象
+			 * e.g dubbo 使用继承这个获取真实的dubbo调用对象
+			 * @see AbstractLazyCreationTargetSource#getTarget()
+			 *
+			 */
 			target = targetSource.getTarget();
 			Class<?> targetClass = (target != null ? target.getClass() : null);
 

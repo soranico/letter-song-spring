@@ -25,7 +25,7 @@ class KanoAppContextOrderedBpp implements BeanPostProcessor, PriorityOrdered {
 	}
 
 	public void kano(){
-//		log.info("applicationContext = {}",applicationContext);
-//		log.info("kanoA = {}",kanoA);
+		log.info("applicationContext = {}",applicationContext);
+		log.info("kanoA = {}",kanoA);
 	}
 }

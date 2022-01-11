@@ -524,7 +524,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		if (resolvedBeanNames != null) {
 			return resolvedBeanNames;
 		}
-		// 缓存中没有则需要遍历所有BD并处理合并后进行缓存
+		/**
+		 * 缓存中没有则需要遍历所有BD并处理合并后进行缓存
+		 * @see DefaultListableBeanFactory#doGetBeanNamesForType(ResolvableType, boolean, boolean) 
+		 */
 		resolvedBeanNames = doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, true);
 		if (ClassUtils.isCacheSafe(type, getBeanClassLoader())) {
 			cache.put(type, resolvedBeanNames);
@@ -559,6 +562,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						/**
 						 * 不是factoryBean那么只需要进行 class匹配
 						 * 类相同则是需要找的类型的beanName
+						 * @see DefaultListableBeanFactory#isTypeMatch(String, ResolvableType, boolean) 
 						 */
 						if (!isFactoryBean) {
 							if (includeNonSingletons || isSingleton(beanName, mbd, dbd)) {
@@ -613,6 +617,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					beanName = FACTORY_BEAN_PREFIX + beanName;
 				}
 				// Match raw bean instance (might be raw FactoryBean).
+				/**
+				 * 
+				 */
 				if (isTypeMatch(beanName, type)) {
 					result.add(beanName);
 				}
@@ -1318,6 +1325,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		if (Optional.class == descriptor.getDependencyType()) {
 			return createOptionalDependency(descriptor, requestingBeanName);
 		}
+		/**
+		 * 依赖的类型是 ObjectFactory
+		 * @see org.springframework.web.context.support.WebApplicationContextUtils.RequestObjectFactory
+		 */
 		else if (ObjectFactory.class == descriptor.getDependencyType() ||
 				ObjectProvider.class == descriptor.getDependencyType()) {
 			return new DependencyObjectProvider(descriptor, requestingBeanName);
@@ -1348,8 +1359,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (shortcut != null) {
 				return shortcut;
 			}
-
+			/**
+			 * 依赖的bean 的类型
+			 */
 			Class<?> type = descriptor.getDependencyType();
+			/**
+			 * 从 @Value 中查找指定的值
+			 */
 			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor);
 			if (value != null) {
 				if (value instanceof String) {
@@ -1369,7 +1385,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							converter.convertIfNecessary(value, type, descriptor.getMethodParameter()));
 				}
 			}
-
+			/**
+			 * 如果依赖是一个集合或者map的话
+			 * 这个方法会返回值,如果是普通类的话这里返回的是null
+			 * @see DefaultListableBeanFactory#resolveMultipleBeans(DependencyDescriptor, String, Set, TypeConverter) 
+			 */
 			Object multipleBeans = resolveMultipleBeans(descriptor, beanName, autowiredBeanNames, typeConverter);
 			if (multipleBeans != null) {
 				return multipleBeans;

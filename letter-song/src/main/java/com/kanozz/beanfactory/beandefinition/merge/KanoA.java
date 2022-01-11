@@ -3,7 +3,6 @@ package com.kanozz.beanfactory.beandefinition.merge;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -16,18 +15,18 @@ class KanoA {
 		log.info("kanoA create");
 	}
 
-	@Autowired
-	private KanoB kanoB;
+//	@Autowired
+//	private KanoB kanoB;
 
 
-	public void setKanoB(KanoB kano){
-		this.kanoB = kanoB;
-	}
+//	public void setKanoB(KanoB kano){
+//		this.kanoB = kanoB;
+//	}
 
-	@Override
-	public String toString() {
-		return "KanoA{" +
-				"kanoB=" + kanoB +
-				'}';
-	}
+//	@Override
+//	public String toString() {
+//		return "KanoA{" +
+//				"kanoB=" + kanoB +
+//				'}';
+//	}
 }
