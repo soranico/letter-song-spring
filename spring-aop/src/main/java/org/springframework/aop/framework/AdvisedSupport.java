@@ -83,6 +83,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	/**
 	 * List of Advisors. If an Advice is added, it will be wrapped
 	 * in an Advisor before being added to this List.
+	 * 存放了对于当前类生效的 执行链
 	 */
 	private List<Advisor> advisors = new ArrayList<>();
 
@@ -309,6 +310,9 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	 * @param advisors the advisors to register
 	 */
 	public void addAdvisors(Advisor... advisors) {
+		/**
+		 * 添加拦截器
+		 */
 		addAdvisors(Arrays.asList(advisors));
 	}
 

@@ -220,6 +220,10 @@ class ConstructorResolver {
 					argsHolder = new ArgumentsHolder(explicitArgs);
 				}
 
+				/**
+				 * 计算得到bean 和实际需要的类型之间的差异
+				 * @see ArgumentsHolder#getTypeDifferenceWeight(java.lang.Class[])
+				 */
 				int typeDiffWeight = (mbd.isLenientConstructorResolution() ?
 						argsHolder.getTypeDifferenceWeight(paramTypes) : argsHolder.getAssignabilityWeight(paramTypes));
 				// Choose this constructor if it represents the closest match.
@@ -774,6 +778,10 @@ class ConstructorResolver {
 							"] - did you specify the correct bean references as arguments?");
 				}
 				try {
+					/**
+					 * 获取需要注入的bean
+					 * @see ConstructorResolver#resolveAutowiredArgument(MethodParameter, String, Set, TypeConverter, boolean) 
+					 */
 					Object autowiredArgument = resolveAutowiredArgument(
 							methodParam, beanName, autowiredBeanNames, converter, fallback);
 					args.rawArguments[paramIndex] = autowiredArgument;
@@ -870,6 +878,12 @@ class ConstructorResolver {
 			return injectionPoint;
 		}
 		try {
+			/**
+			 * 解析依赖,返回依赖的bean
+			 * 此时可能是个代理对象
+			 * e.g 构造方法循环依赖的情况下 使用 Lazy 破解
+			 * @see DefaultListableBeanFactory#resolveDependency(DependencyDescriptor, String, Set, TypeConverter)
+			 */
 			return this.beanFactory.resolveDependency(
 					new DependencyDescriptor(param, true), beanName, autowiredBeanNames, typeConverter);
 		}

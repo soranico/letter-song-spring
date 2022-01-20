@@ -386,6 +386,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		return result;
 	}
 
+	/**
+	 * 这个方法调用表明已经存在一个 bean 了(属性填充,回调方法) 都已经执行完了
+	 * 此时给一个修改这个 bean 的机会 (代理等)
+	 * @param existingBean the existing bean instance
+	 * @param beanName the name of the bean, to be passed to it if necessary
+	 * (only passed to {@link BeanPostProcessor BeanPostProcessors};
+	 * can follow the {@link #ORIGINAL_INSTANCE_SUFFIX} convention in order to
+	 * enforce the given instance to be returned, i.e. no proxies etc)
+	 * @return
+	 * @throws BeansException
+	 */
 	@Override
 	public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName)
 			throws BeansException {
@@ -1097,8 +1108,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				if (targetType != null) {
 					/**
 					 * 如果返回对象说明已经实例完成
+					 * @see AbstractAutowireCapableBeanFactory#applyBeanPostProcessorsBeforeInstantiation(Class, String)
 					 */
 					bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
+					/**
+					 * 已经给有了一个 对象 了 那么直接执行 对象的 初始化完成逻辑就行
+					 */
 					if (bean != null) {
 						bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
 					}
@@ -1122,6 +1137,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 */
 	@Nullable
 	protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+		/**
+		 * 如果这里返回那么需要返回的是一个 bean 而不是 一个对象
+		 * @see InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation(Class, String)
+		 */
 		for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
 			Object result = bp.postProcessBeforeInstantiation(beanClass, beanName);
 			if (result != null) {

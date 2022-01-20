@@ -1339,6 +1339,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		else {
 			/**
 			 * 注解@Lazy用于属性时注入的bean对象不同
+			 * @see org.springframework.context.annotation.ContextAnnotationAutowireCandidateResolver#getLazyResolutionProxyIfNecessary(org.springframework.beans.factory.config.DependencyDescriptor, java.lang.String)
+			 *
+			 * 懒加载此时不会去调用构造方法创建对象的,因为此时创建的是一个代理对象
+			 * @see org.springframework.context.annotation.ContextAnnotationAutowireCandidateResolver#buildLazyResolutionProxy(org.springframework.beans.factory.config.DependencyDescriptor, java.lang.String)
 			 */
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);

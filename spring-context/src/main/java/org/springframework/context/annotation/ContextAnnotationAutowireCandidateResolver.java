@@ -16,15 +16,7 @@
 
 package org.springframework.context.annotation;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import org.springframework.aop.Advisor;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -36,6 +28,10 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Complete implementation of the
@@ -51,16 +47,31 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 	@Override
 	@Nullable
 	public Object getLazyResolutionProxyIfNecessary(DependencyDescriptor descriptor, @Nullable String beanName) {
+		/**
+		 * 如果需要懒加载的那么久构建懒加载
+		 *
+		 * 判断懒加载
+		 * @see ContextAnnotationAutowireCandidateResolver#isLazy(DependencyDescriptor)
+		 *
+		 * 创建懒加载实例
+		 * @see ContextAnnotationAutowireCandidateResolver#buildLazyResolutionProxy(DependencyDescriptor, String)
+		 */
 		return (isLazy(descriptor) ? buildLazyResolutionProxy(descriptor, beanName) : null);
 	}
 
 	protected boolean isLazy(DependencyDescriptor descriptor) {
+		/**
+		 * 类寻找
+		 */
 		for (Annotation ann : descriptor.getAnnotations()) {
 			Lazy lazy = AnnotationUtils.getAnnotation(ann, Lazy.class);
 			if (lazy != null && lazy.value()) {
 				return true;
 			}
 		}
+		/**
+		 * TODO 构造方法
+		 */
 		MethodParameter methodParam = descriptor.getMethodParameter();
 		if (methodParam != null) {
 			Method method = methodParam.getMethod();
@@ -83,15 +94,25 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 		TargetSource ts = new TargetSource() {
 			@Override
 			public Class<?> getTargetClass() {
+				/**
+				 * 真实的bean的类
+				 */
 				return descriptor.getDependencyType();
 			}
 			@Override
 			public boolean isStatic() {
 				return false;
 			}
+
+			/**
+			 * 获取真实的bean
+			 */
 			@Override
 			public Object getTarget() {
 				Set<String> autowiredBeanNames = (beanName != null ? new LinkedHashSet<>(1) : null);
+				/**
+				 * 获取bean
+				 */
 				Object target = dlbf.doResolveDependency(descriptor, beanName, autowiredBeanNames, null);
 				if (target == null) {
 					Class<?> type = getTargetClass();
@@ -121,12 +142,19 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 			}
 		};
 
+		/**
+		 * 这里并没有设置拦截链
+		 * @see ProxyFactory#addAdvisors(Advisor...) 
+		 */
 		ProxyFactory pf = new ProxyFactory();
 		pf.setTargetSource(ts);
 		Class<?> dependencyType = descriptor.getDependencyType();
 		if (dependencyType.isInterface()) {
 			pf.addInterface(dependencyType);
 		}
+		/**
+		 * 生成Lazy的代理对象
+		 */
 		return pf.getProxy(dlbf.getBeanClassLoader());
 	}
 
